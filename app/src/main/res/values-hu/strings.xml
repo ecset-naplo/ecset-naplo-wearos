@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ecset Napló</string>
+    <string name="no_lessons_get_rest">Nincsenek most óráid, pihend ki magad!</string>
+    <string name="room">Terem: %1$s</string>
+    <string name="settings">Beállítások</string>
+    <string name="appearance">Megjelenés</string>
+    <string name="language">Nyelv</string>
+    <string name="language_button_subtitle">Alkalmazás nyelv kezelése</string>
+    <string name="system_language">Rendszernyelv</string>
+    <string name="timetable">Órarend</string>
+    <string name="manage_timetable">Órarend kezelése</string>
+    <string name="manage_timetable_button_subtitle">Az órarended testreszabása</string>
+    <string name="no_lessons_today_get_rest">Nincsenek ma óráid, pihend ki magad!</string>
+    <string name="manage_rooms">Termek kezelése</string>
+    <string name="manage_rooms_button_subtitle">Termek készítése, szerkesztése, törlése</string>
+    <string name="manage_teachers">Tanárok kezelése</string>
+    <string name="manage_teachers_button_subtitle">Tanárok készítése, szerkesztése, törlése</string>
+    <string name="add_room">Terem hozzáadása</string>
+    <string name="room_name">Terem neve</string>
+    <string name="rooms">Termek</string>
+    <string name="edit_room">Terem szerkesztése</string>
+    <string name="delete_room">Terem törlése</string>
+    <string name="room_delete_confirmation">Biztos vagy benne hogy ki szeretnéd ezt a termet törölni? Ez a művelet nem vonható vissza, és az óráknak nem lesz megadva terem.</string>
+    <string name="save">Mentés</string>
+</resources>
