@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.TableChart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +30,7 @@ import xyz.nbani.ecsetnaplo.ui.screens.settings.components.LanguageAlertDialog
 fun SettingsScreen(
     onOpenTimetable: (Boolean) -> Unit,
     onOpenRoomsScreen: (Boolean) -> Unit,
+    onOpenTeachersScreen: (Boolean) -> Unit
 ) {
     val state = rememberTransformingLazyColumnState()
     val spec = rememberTransformationSpec()
@@ -77,6 +79,18 @@ fun SettingsScreen(
                     subtitle = stringResource(R.string.manage_rooms_button_subtitle),
                     onClick = {
                         onOpenRoomsScreen(true)
+                    },
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec)
+                )
+            }
+            item {
+                ClickRowElement(
+                    icon = Icons.Default.Person,
+                    title = stringResource(R.string.manage_teachers),
+                    subtitle = stringResource(R.string.manage_teachers_button_subtitle),
+                    onClick = {
+                        onOpenTeachersScreen(true)
                     },
                     modifier = Modifier.transformedHeight(this, spec),
                     transformation = SurfaceTransformation(spec)

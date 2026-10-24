@@ -79,8 +79,9 @@ class TimetableViewModel(
         private set
 
     fun loadTeacher(id: Long) {
+        teacher = null
         viewModelScope.launch {
-            room = repository.getRoom(id)
+            teacher = repository.getTeacher(id)
         }
     }
 
@@ -88,7 +89,13 @@ class TimetableViewModel(
 
     fun updateTeacher(teacher: Teacher) = viewModelScope.launch { repository.updateTeacher(teacher) }
 
-    fun deleteTeacher(teacher: Teacher) = viewModelScope.launch { repository.deleteTeacher(teacher) }
+    fun deleteTeacherWithKeepLessons(teacher: Teacher) = viewModelScope.launch {
+        repository.deleteTeacherWithKeepLessons(teacher)
+    }
+
+    fun deleteTeacherWithDeleteLessons(teacher: Teacher) = viewModelScope.launch {
+        repository.deleteTeacherWithDeleteLessons(teacher)
+    }
 
     companion object {
         val Factory = viewModelFactory {

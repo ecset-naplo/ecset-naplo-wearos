@@ -23,4 +23,13 @@
     <string name="delete_room">Terem törlése</string>
     <string name="room_delete_confirmation">Biztos vagy benne hogy ki szeretnéd ezt a termet törölni? Ez a művelet nem vonható vissza, és a hozzátartozó óráknak nem lesz megadva terem!</string>
     <string name="save">Mentés</string>
+    <string name="add_teacher">Tanár hozzáadása</string>
+    <string name="teacher_name">Tanár neve</string>
+    <string name="teachers">Tanárok</string>
+    <string name="edit_teacher">Tanár szerkesztése</string>
+    <string name="teacher_delete_confirmation_delete_lessons">Biztos vagy benne hogy ki szeretnéd ezt a tanárt törölni? Ez a művelet nem vonható vissza, és A HOZZÁTARTOZÓ ÓRÁK IS KI LESZNEK TÖRÖLVE!</string>
+    <string name="teacher_delete_confirmation_keep_lessons">Biztos vagy benne hogy ki szeretnéd ezt a tanárt törölni? Ez a művelet nem vonható vissza, és a hozzátartozó óráknak nem lesz megadva terem!</string>
+    <string name="delete_teacher">Tanár kitörlése</string>
+    <string name="delete_teacher_keep_lessons">Tanár kitörlése, órák meghagyása</string>
+    <string name="delete_teacher_delete_associated_lessons">Tanár kitörlése, hozzátartozó órák törlése</string>
 </resources>

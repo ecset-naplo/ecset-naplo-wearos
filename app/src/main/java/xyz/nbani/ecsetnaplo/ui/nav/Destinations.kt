@@ -11,4 +11,9 @@ sealed class Destination(val route: String) {
     object Rooms : Destination("rooms/{isEditor}")
     object AddRoom : Destination("addRoom")
     object EditRoom : Destination("editRoom/{id}")
+    // Teachers screen
+    object Teachers : Destination("teachers/{isEditor}")
+    object AddTeacher : Destination("addTeacher")
+    object EditTeacher : Destination("editTeacher/{id}")
+    object DeleteTeacher : Destination("deleteTeacher")
 }

@@ -130,5 +130,7 @@ class TimetableRepository(
 
     suspend fun updateTeacher(teacher: Teacher) = teacherDao.update(teacher)
 
-    suspend fun deleteTeacher(teacher: Teacher) = teacherDao.delete(teacher)
+    suspend fun deleteTeacherWithKeepLessons(teacher: Teacher) = teacherDao.delete(teacher)
+
+    suspend fun deleteTeacherWithDeleteLessons(teacher: Teacher) = teacherDao.deleteWithLessons(teacher)
 }

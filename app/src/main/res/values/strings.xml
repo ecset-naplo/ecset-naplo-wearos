@@ -22,5 +22,14 @@
     <string name="delete_room">Delete room</string>
     <string name="room_delete_confirmation">Are you sure you would like to delete the room? This action cannot be undone, and lessons associated won\'t have a room specified!</string>
     <string name="save">Save</string>
+    <string name="add_teacher">Add teacher</string>
+    <string name="teacher_name">Teacher name</string>
+    <string name="teachers">Teachers</string>
+    <string name="edit_teacher">Edit teacher</string>
+    <string name="teacher_delete_confirmation_delete_lessons">Are you sure you would like to delete the teacher? This action cannot be undone, and LESSONS ASSOCIATED WILL ALSO BE DELETED!</string>
+    <string name="teacher_delete_confirmation_keep_lessons">Are you sure you would like to delete the teacher? This action cannot be undone, and lessons won\'t have a teacher specified!</string>
+    <string name="delete_teacher">Delete teacher</string>
+    <string name="delete_teacher_keep_lessons">Delete teacher, keep lessons</string>
+    <string name="delete_teacher_delete_associated_lessons">Delete teacher, delete associated lessons</string>
 
 </resources>
