@@ -20,7 +20,7 @@
     <string name="rooms">Rooms</string>
     <string name="edit_room">Edit room</string>
     <string name="delete_room">Delete room</string>
-    <string name="room_delete_confirmation">Are you sure you would like to delete the room? This action cannot be undone, and lessons won\'t have a room specified.</string>
+    <string name="room_delete_confirmation">Are you sure you would like to delete the room? This action cannot be undone, and lessons associated won\'t have a room specified!</string>
     <string name="save">Save</string>
 
 </resources>

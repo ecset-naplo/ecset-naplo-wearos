@@ -21,6 +21,6 @@
     <string name="rooms">Termek</string>
     <string name="edit_room">Terem szerkesztése</string>
     <string name="delete_room">Terem törlése</string>
-    <string name="room_delete_confirmation">Biztos vagy benne hogy ki szeretnéd ezt a termet törölni? Ez a művelet nem vonható vissza, és az óráknak nem lesz megadva terem.</string>
+    <string name="room_delete_confirmation">Biztos vagy benne hogy ki szeretnéd ezt a termet törölni? Ez a művelet nem vonható vissza, és a hozzátartozó óráknak nem lesz megadva terem!</string>
     <string name="save">Mentés</string>
 </resources>
