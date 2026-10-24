@@ -113,7 +113,7 @@ fun DeleteTeacher(
                     popNavStackBack()
                     popNavStackBack()
                 },
-                onDismiss = { showDeleteWithKeepLessonsConfirmDialog = false },
+                onDismiss = { showDeleteWithDeleteLessonsConfirmDialog = false },
                 visible = true
             )
         }
