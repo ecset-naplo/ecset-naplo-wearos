@@ -2,8 +2,6 @@ package xyz.nbani.ecsetnaplo.ui.screens.timetable.rooms
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,7 +43,7 @@ fun AddRoom(
         TransformingLazyColumn(
             state = state,
             contentPadding = contentPadding,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             sectionHeader(R.string.add_room)
 
@@ -65,10 +63,6 @@ fun AddRoom(
                     },
                     enabled = elementsEnabled
                 )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(4.dp))
             }
 
             item {
