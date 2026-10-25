@@ -2,6 +2,7 @@ package xyz.nbani.ecsetnaplo.data.local.entity
 
 import androidx.room3.Entity
 import androidx.room3.ForeignKey
+import androidx.room3.Index
 import androidx.room3.PrimaryKey
 import java.time.LocalDate
 import java.time.LocalTime
@@ -27,6 +28,11 @@ import java.time.LocalTime
             childColumns = ["lessonId"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index("regularPeriodId"),
+        Index("roomId"),
+        Index("lessonId")
     ]
 )
 data class IrregularPeriod(
