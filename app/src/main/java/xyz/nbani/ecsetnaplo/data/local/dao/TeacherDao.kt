@@ -14,8 +14,8 @@ interface TeacherDao {
     @Delete
     suspend fun delete(teacher: Teacher)
 
-    @Query("DELETE FROM lessons where id = :id")
-    suspend fun deleteLessonsOf(id: Long)
+    @Query("DELETE FROM lessons where teacherId = :teacherId")
+    suspend fun deleteLessonsOf(teacherId: Long)
 
     @Transaction
     suspend fun deleteWithLessons(teacher: Teacher) {
