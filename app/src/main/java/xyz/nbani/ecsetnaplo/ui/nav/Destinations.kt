@@ -1,24 +1,27 @@
 package xyz.nbani.ecsetnaplo.ui.nav
 
-sealed class Destination(val route: String) {
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
+
+sealed interface Destination : NavKey {
     // Main routes
-    object Main : Destination("main")
+    @Serializable data object Main : Destination
 
     // Timetable route
-    object Timetable : Destination("timetable/{isEditor}")
+    @Serializable data class Timetable(val isEditor: Boolean) : Destination
 
     // Rooms screen
-    object Rooms : Destination("rooms/{isEditor}")
-    object AddRoom : Destination("addRoom")
-    object EditRoom : Destination("editRoom/{id}")
+    @Serializable data class Rooms(val isEditor: Boolean) : Destination
+    @Serializable data object AddRoom : Destination
+    @Serializable data class EditRoom(val id: Long) : Destination
     // Teachers screen
-    object Teachers : Destination("teachers/{isEditor}")
-    object AddTeacher : Destination("addTeacher")
-    object EditTeacher : Destination("editTeacher/{id}")
-    object DeleteTeacher : Destination("deleteTeacher")
+    @Serializable data class Teachers(val isEditor: Boolean) : Destination
+    @Serializable data object AddTeacher : Destination
+    @Serializable data class EditTeacher(val id: Long) : Destination
+    @Serializable data object DeleteTeacher : Destination
 
     // Lessons screen
-    object Lessons : Destination("lessons/{isEditor}")
-    object AddLesson : Destination("addLesson")
-    object EditLesson : Destination("editLesson/{id}")
+    @Serializable data class Lessons(val isEditor: Boolean) : Destination
+    @Serializable data object AddLesson : Destination
+    @Serializable data class EditLesson(val id: Long) : Destination
 }

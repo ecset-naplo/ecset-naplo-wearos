@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -41,7 +42,7 @@ android {
 dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.activity.compose)
-    implementation(libs.wear.compose.navigation)
+    implementation(libs.androidx.wear.compose.navigation3)
     implementation(libs.compose.foundation)
     implementation(libs.compose.material3)
     implementation(libs.compose.ui.tooling)
@@ -54,6 +55,11 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     ksp(libs.androidx.room.compiler)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)

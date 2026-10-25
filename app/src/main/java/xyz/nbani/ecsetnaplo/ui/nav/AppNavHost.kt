@@ -2,13 +2,12 @@ package xyz.nbani.ecsetnaplo.ui.nav
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
-import androidx.wear.compose.navigation.SwipeDismissableNavHost
-import androidx.wear.compose.navigation.composable
-import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
-import xyz.nbani.ecsetnaplo.ui.screens.timetable.editor.TimetableEditorScreen
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
+import androidx.wear.compose.navigation3.rememberSwipeDismissableSceneStrategy
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.TimetableScreen
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.AddLesson
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.EditLesson
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.LessonsScreen
@@ -24,194 +23,129 @@ import xyz.nbani.ecsetnaplo.ui.viewmodels.TimetableViewModel
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberSwipeDismissableNavController(),
     timetableViewModel: TimetableViewModel,
 ) {
-    SwipeDismissableNavHost(
-        navController = navController,
-        startDestination = Destination.Main.route,
-        modifier = modifier
-    ) {
-        // Main routes
-        composable(Destination.Main.route) {
-            MainPager(
-                timetableViewModel = timetableViewModel,
-                onOpenTimetable = { isEditor ->
-                    navController.navigate("timetable/$isEditor")
-                },
-                onOpenRoomsScreen = {
-                    isEditor -> navController.navigate("rooms/$isEditor")
-                },
-                onOpenTeachersScreen = {
-                    isEditor -> navController.navigate("teachers/$isEditor")
-                },
-                onOpenLessonsScreen = {
-                    isEditor -> navController.navigate("lessons/$isEditor")
-                }
-            )
-        }
+    val backStack = rememberNavBackStack(Destination.Main as NavKey)
+    val strategy = rememberSwipeDismissableSceneStrategy<NavKey>()
 
-        // Timetable editor
-        composable (
-            route = Destination.Timetable.route,
-            arguments = listOf(
-                navArgument("isEditor") {
-                    type = NavType.BoolType
-                }
-            )
-        ) { backStackEntry ->
-            val isEditor = backStackEntry.arguments
-                ?.getBoolean("isEditor") ?: false
+    NavDisplay(
+        backStack = backStack,
+        sceneStrategies = listOf(strategy),
+        modifier = modifier,
+        entryProvider = entryProvider {
+            // Main routes
 
-            TimetableEditorScreen(
-                viewModel = timetableViewModel,
-                isEditor = isEditor
-            )
-        }
+            entry<Destination.Main> {
+                MainPager(
+                    timetableViewModel = timetableViewModel,
+                    onOpenTimetable = { isEditor ->
+                        backStack.add(Destination.Timetable(isEditor))
+                    },
+                    onOpenRoomsScreen = { isEditor ->
+                        backStack.add(Destination.Rooms(isEditor))
+                    },
+                    onOpenTeachersScreen = { isEditor ->
+                        backStack.add(Destination.Teachers(isEditor))
+                    },
+                    onOpenLessonsScreen = { isEditor ->
+                        backStack.add(Destination.Lessons(isEditor))
+                    }
+                )
+            }
 
-        // Rooms screen
-        composable(
-            route = Destination.Rooms.route,
-            arguments = listOf(
-                navArgument("isEditor") {
-                    type = NavType.BoolType
-                }
-            )
-        ) { backStackEntry ->
-            val isEditor = backStackEntry.arguments
-                ?.getBoolean("isEditor") ?: false
+            // Timetable
+            entry<Destination.Timetable> { key ->
+                TimetableScreen(
+                    viewModel = timetableViewModel,
+                    onOpenAddPeriodScreen = { /* TODO: backStack.add(Destination.AddPeriod()) */ },
+                    isEditor = key.isEditor
+                )
+            }
 
-            RoomsScreen(
-                viewModel = timetableViewModel,
-                onOpenAddRoomScreen = { navController.navigate(Destination.AddRoom.route) },
-                onOpenEditRoomScreen = { id -> navController.navigate("editRoom/$id") },
-                isEditor = isEditor
-            )
-        }
-        composable(route = Destination.AddRoom.route) {
-            AddRoom(
-                viewModel = timetableViewModel,
-                popNavStackBack = { navController.popBackStack() }
-            )
-        }
-        composable(
-            route = Destination.EditRoom.route,
-            arguments = listOf(
-                navArgument("id") {
-                    type = NavType.LongType
-                }
-            )
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments
-                ?.getLong("id") ?: return@composable
+            // Rooms screen
+            entry<Destination.Rooms> { key ->
+                RoomsScreen(
+                    viewModel = timetableViewModel,
+                    onOpenAddRoomScreen = { backStack.add(Destination.AddRoom) },
+                    onOpenEditRoomScreen = { id -> backStack.add(Destination.EditRoom(id)) },
+                    isEditor = key.isEditor
+                )
+            }
+            entry<Destination.AddRoom> {
+                AddRoom(
+                    viewModel = timetableViewModel,
+                    popNavStackBack = { backStack.removeLastOrNull() }
+                )
+            }
+            entry<Destination.EditRoom> { key ->
+                EditRoom(
+                    viewModel = timetableViewModel,
+                    popNavStackBack = { backStack.removeLastOrNull() },
+                    roomId = key.id
+                )
+            }
 
-            EditRoom(
-                viewModel = timetableViewModel,
-                popNavStackBack = { navController.popBackStack() },
-                roomId = id
-            )
-        }
+            // Teachers screen
+            entry<Destination.Teachers> { key ->
+                TeachersScreen(
+                    viewModel = timetableViewModel,
+                    onOpenAddTeacherScreen = { backStack.add(Destination.AddTeacher) },
+                    onOpenEditTeacherScreen = { id -> backStack.add(Destination.EditTeacher(id)) },
+                    popNavStackBack = { backStack.removeLastOrNull() },
+                    isEditor = key.isEditor
+                )
+            }
+            entry<Destination.AddTeacher> {
+                AddTeacher(
+                    viewModel = timetableViewModel,
+                    popNavStackBack = { backStack.removeLastOrNull() }
+                )
+            }
+            entry<Destination.EditTeacher> { key ->
+                EditTeacher(
+                    viewModel = timetableViewModel,
+                    onOpenDeleteTeacherScreen = { backStack.add(Destination.DeleteTeacher) },
+                    popNavStackBack = { backStack.removeLastOrNull() },
+                    teacherId = key.id
+                )
+            }
+            entry<Destination.DeleteTeacher> {
+                DeleteTeacher(
+                    viewModel = timetableViewModel,
+                    popNavStackBack = { backStack.removeLastOrNull() }
+                )
+            }
 
-        // Teachers screen
-        composable(
-            route = Destination.Teachers.route,
-            arguments = listOf(
-                navArgument("isEditor") {
-                    type = NavType.BoolType
-                }
-            )
-        ) { backStackEntry ->
-            val isEditor = backStackEntry.arguments
-                ?.getBoolean("isEditor") ?: false
-
-            TeachersScreen(
-                viewModel = timetableViewModel,
-                onOpenAddTeacherScreen = { navController.navigate(Destination.AddTeacher.route) },
-                onOpenEditTeacherScreen = { id -> navController.navigate("editTeacher/$id") },
-                popNavStackBack = { navController.popBackStack() },
-                isEditor = isEditor
-            )
-        }
-        composable(route = Destination.AddTeacher.route) {
-            AddTeacher(
-                viewModel = timetableViewModel,
-                popNavStackBack = { navController.popBackStack() }
-            )
-        }
-        composable(
-            route = Destination.EditTeacher.route,
-            arguments = listOf(
-                navArgument("id") {
-                    type = NavType.LongType
-                }
-            )
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments
-                ?.getLong("id") ?: return@composable
-
-            EditTeacher(
-                viewModel = timetableViewModel,
-                onOpenDeleteTeacherScreen = { navController.navigate(Destination.DeleteTeacher.route) },
-                popNavStackBack = { navController.popBackStack() },
-                teacherId = id
-            )
-        }
-        composable(
-            route = Destination.DeleteTeacher.route
-        ) {
-            DeleteTeacher(
-                viewModel = timetableViewModel,
-                popNavStackBack = { navController.popBackStack() }
-            )
-        }
-
-        // Rooms screen
-        composable(
-            route = Destination.Lessons.route,
-            arguments = listOf(
-                navArgument("isEditor") {
-                    type = NavType.BoolType
-                }
-            )
-        ) { backStackEntry ->
-            val isEditor = backStackEntry.arguments
-                ?.getBoolean("isEditor") ?: false
-
-            LessonsScreen(
-                viewModel = timetableViewModel,
-                onOpenAddLessonScreen = { navController.navigate(Destination.AddLesson.route) },
-                onOpenEditLessonScreen = { id -> navController.navigate("editLesson/$id") },
-                isEditor = isEditor
-            )
-        }
-        composable(route = Destination.AddLesson.route) {
-            AddLesson(
-                viewModel = timetableViewModel,
-                onOpenTeachersScreen = {
-                    isEditor -> navController.navigate("teachers/$isEditor")
-                },
-                popNavStackBack = { navController.popBackStack() }
-            )
-        }
-        composable(
-            route = Destination.EditLesson.route,
-            arguments = listOf(
-                navArgument("id") {
-                    type = NavType.LongType
-                }
-            )
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments
-                ?.getLong("id") ?: return@composable
-
-            EditLesson(
-                viewModel = timetableViewModel,
-                onOpenTeachersScreen = {
-                        isEditor -> navController.navigate("teachers/$isEditor")
-                },
-                popNavStackBack = { navController.popBackStack() },
-                lessonId = id
-            )
-        }
-    }
+            // Lessons screen
+            entry<Destination.Lessons> { key ->
+                LessonsScreen(
+                    viewModel = timetableViewModel,
+                    onOpenAddLessonScreen = { backStack.add(Destination.AddRoom) },
+                    onOpenEditLessonScreen = { id -> backStack.add(Destination.EditRoom(id)) },
+                    onOpenAddLessonScreen = { backStack.add(Destination.AddLesson) },
+                    onOpenEditLessonScreen = { id -> backStack.add(Destination.EditLesson(id)) },
+                    isEditor = key.isEditor
+                )
+            }
+            entry<Destination.AddLesson> {
+                AddLesson(
+                    viewModel = timetableViewModel,
+                    onOpenTeachersScreen = { isEditor ->
+                        backStack.add(Destination.Teachers(isEditor))
+                    },
+                    popNavStackBack = { backStack.removeLastOrNull() }
+                )
+            }
+            entry<Destination.EditLesson> { key ->
+                EditLesson(
+                    viewModel = timetableViewModel,
+                    onOpenTeachersScreen = { isEditor ->
+                        backStack.add(Destination.Teachers(isEditor))
+                    },
+                    popNavStackBack = { backStack.removeLastOrNull() },
+                    lessonId = key.id
+                )
+            }
+        },
+    )
 }
