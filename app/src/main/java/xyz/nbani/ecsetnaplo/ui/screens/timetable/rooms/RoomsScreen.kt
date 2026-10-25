@@ -35,7 +35,7 @@ fun RoomsScreen(
     onOpenAddRoomScreen: () -> Unit,
     onOpenEditRoomScreen: (Long) -> Unit,
     isEditor: Boolean,
-    onSelectRoom: (() -> Unit)? = null
+    onSelectRoom: ((RoomEntity) -> Unit)? = null
 ) {
     LaunchedEffect(isEditor, onSelectRoom == null) {
         if (isEditor && onSelectRoom == null) {
@@ -70,7 +70,7 @@ fun RoomsScreen(
                             if (isEditor) {
                                 onOpenEditRoomScreen(room.id)
                             } else {
-                                onSelectRoom?.invoke()
+                                onSelectRoom?.invoke(room)
                             }
                         },
                         modifier = Modifier.transformedHeight(this, spec),

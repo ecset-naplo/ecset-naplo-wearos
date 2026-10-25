@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import xyz.nbani.ecsetnaplo.EcsetApp
+import xyz.nbani.ecsetnaplo.data.local.entity.Lesson
 import xyz.nbani.ecsetnaplo.data.local.entity.RoomEntity
 import xyz.nbani.ecsetnaplo.data.local.entity.Teacher
 import xyz.nbani.ecsetnaplo.data.model.Period
@@ -64,6 +65,10 @@ class TimetableViewModel(
         }
     }
 
+    fun clearRoom() {
+        room = null
+    }
+
     fun insertRoom(room: RoomEntity) = viewModelScope.launch { repository.insertRoom(room) }
 
     fun updateRoom(room: RoomEntity) = viewModelScope.launch { repository.updateRoom(room) }
@@ -85,17 +90,51 @@ class TimetableViewModel(
         }
     }
 
+    fun clearTeacher() {
+        teacher = null
+    }
+
     fun insertTeacher(teacher: Teacher) = viewModelScope.launch { repository.insertTeacher(teacher) }
 
     fun updateTeacher(teacher: Teacher) = viewModelScope.launch { repository.updateTeacher(teacher) }
 
-    fun deleteTeacherWithKeepLessons(teacher: Teacher) = viewModelScope.launch {
-        repository.deleteTeacherWithKeepLessons(teacher)
+    // in delete functions, teacherEntry is used because the teacher variable is used as well in fun
+    fun deleteTeacherWithKeepLessons(teacherEntry: Teacher) = viewModelScope.launch {
+        if (teacher?.id == teacherEntry.id) { teacher = null }
+        repository.deleteTeacherWithKeepLessons(teacherEntry)
     }
 
-    fun deleteTeacherWithDeleteLessons(teacher: Teacher) = viewModelScope.launch {
-        repository.deleteTeacherWithDeleteLessons(teacher)
+    fun deleteTeacherWithDeleteLessons(teacherEntry: Teacher) = viewModelScope.launch {
+        if (teacher?.id == teacherEntry.id) { teacher = null }
+        repository.deleteTeacherWithDeleteLessons(teacherEntry)
     }
+
+    // Lesson
+    // Room
+    val lessons: StateFlow<List<Lesson>?> = repository.observeAllLessons()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5), null)
+
+    var lesson by mutableStateOf<Lesson?>(null)
+        private set
+
+    fun loadLesson(id: Long) {
+        lesson = null
+        teacher = null
+        viewModelScope.launch {
+            lesson = repository.getLesson(id)
+            teacher = lesson?.teacherId?.let { repository.getTeacher(it) }
+        }
+    }
+
+    fun clearLesson() {
+        lesson = null
+    }
+
+    fun insertLesson(lesson: Lesson) = viewModelScope.launch { repository.insertLesson(lesson) }
+
+    fun updateLesson(lesson: Lesson) = viewModelScope.launch { repository.updateLesson(lesson) }
+
+    fun deleteLesson(lesson: Lesson) = viewModelScope.launch { repository.deleteLesson(lesson) }
 
     companion object {
         val Factory = viewModelFactory {

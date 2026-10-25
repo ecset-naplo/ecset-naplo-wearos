@@ -13,7 +13,8 @@ fun MainPager(
     timetableViewModel: TimetableViewModel,
     onOpenTimetable: (Boolean) -> Unit,
     onOpenRoomsScreen: (Boolean) -> Unit,
-    onOpenTeachersScreen: (Boolean) -> Unit
+    onOpenTeachersScreen: (Boolean) -> Unit,
+    onOpenLessonsScreen: (Boolean) -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { MainPage.entries.size })
 
@@ -21,7 +22,7 @@ fun MainPager(
         when (MainPage.entries[index]) {
             MainPage.CurrentLesson -> CurrentLessonScreen(timetableViewModel, onOpenTimetable)
             MainPage.Settings -> SettingsScreen(
-                onOpenTimetable, onOpenRoomsScreen, onOpenTeachersScreen
+                onOpenTimetable, onOpenRoomsScreen, onOpenTeachersScreen, onOpenLessonsScreen
             )
         }
     }

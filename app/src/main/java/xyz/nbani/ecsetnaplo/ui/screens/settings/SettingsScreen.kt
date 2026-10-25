@@ -2,6 +2,7 @@ package xyz.nbani.ecsetnaplo.ui.screens.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Person
@@ -30,7 +31,8 @@ import xyz.nbani.ecsetnaplo.ui.screens.settings.components.LanguageAlertDialog
 fun SettingsScreen(
     onOpenTimetable: (Boolean) -> Unit,
     onOpenRoomsScreen: (Boolean) -> Unit,
-    onOpenTeachersScreen: (Boolean) -> Unit
+    onOpenTeachersScreen: (Boolean) -> Unit,
+    onOpenLessonsScreen: (Boolean) -> Unit
 ) {
     val state = rememberTransformingLazyColumnState()
     val spec = rememberTransformationSpec()
@@ -91,6 +93,18 @@ fun SettingsScreen(
                     subtitle = stringResource(R.string.manage_teachers_button_subtitle),
                     onClick = {
                         onOpenTeachersScreen(true)
+                    },
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec)
+                )
+            }
+            item {
+                ClickRowElement(
+                    icon = Icons.Default.AccessTime,
+                    title = stringResource(R.string.manage_lessons),
+                    subtitle = stringResource(R.string.manage_lessons_button_subtitle),
+                    onClick = {
+                        onOpenLessonsScreen(true)
                     },
                     modifier = Modifier.transformedHeight(this, spec),
                     transformation = SurfaceTransformation(spec)

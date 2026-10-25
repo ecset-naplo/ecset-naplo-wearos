@@ -9,6 +9,9 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.editor.TimetableEditorScreen
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.AddLesson
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.EditLesson
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.LessonsScreen
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.rooms.AddRoom
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.rooms.EditRoom
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.rooms.RoomsScreen
@@ -41,6 +44,9 @@ fun AppNavHost(
                 },
                 onOpenTeachersScreen = {
                     isEditor -> navController.navigate("teachers/$isEditor")
+                },
+                onOpenLessonsScreen = {
+                    isEditor -> navController.navigate("lessons/$isEditor")
                 }
             )
         }
@@ -122,6 +128,7 @@ fun AppNavHost(
                 viewModel = timetableViewModel,
                 onOpenAddTeacherScreen = { navController.navigate(Destination.AddTeacher.route) },
                 onOpenEditTeacherScreen = { id -> navController.navigate("editTeacher/$id") },
+                popNavStackBack = { navController.popBackStack() },
                 isEditor = isEditor
             )
         }
@@ -155,6 +162,55 @@ fun AppNavHost(
             DeleteTeacher(
                 viewModel = timetableViewModel,
                 popNavStackBack = { navController.popBackStack() }
+            )
+        }
+
+        // Rooms screen
+        composable(
+            route = Destination.Lessons.route,
+            arguments = listOf(
+                navArgument("isEditor") {
+                    type = NavType.BoolType
+                }
+            )
+        ) { backStackEntry ->
+            val isEditor = backStackEntry.arguments
+                ?.getBoolean("isEditor") ?: false
+
+            LessonsScreen(
+                viewModel = timetableViewModel,
+                onOpenAddLessonScreen = { navController.navigate(Destination.AddLesson.route) },
+                onOpenEditLessonScreen = { id -> navController.navigate("editLesson/$id") },
+                isEditor = isEditor
+            )
+        }
+        composable(route = Destination.AddLesson.route) {
+            AddLesson(
+                viewModel = timetableViewModel,
+                onOpenTeachersScreen = {
+                    isEditor -> navController.navigate("teachers/$isEditor")
+                },
+                popNavStackBack = { navController.popBackStack() }
+            )
+        }
+        composable(
+            route = Destination.EditLesson.route,
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.LongType
+                }
+            )
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments
+                ?.getLong("id") ?: return@composable
+
+            EditLesson(
+                viewModel = timetableViewModel,
+                onOpenTeachersScreen = {
+                        isEditor -> navController.navigate("teachers/$isEditor")
+                },
+                popNavStackBack = { navController.popBackStack() },
+                lessonId = id
             )
         }
     }

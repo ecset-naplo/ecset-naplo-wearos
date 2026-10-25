@@ -133,4 +133,16 @@ class TimetableRepository(
     suspend fun deleteTeacherWithKeepLessons(teacher: Teacher) = teacherDao.delete(teacher)
 
     suspend fun deleteTeacherWithDeleteLessons(teacher: Teacher) = teacherDao.deleteWithLessons(teacher)
+
+    // Lesson related functions
+
+    fun observeAllLessons(): Flow<List<Lesson>> = lessonDao.observeLessons()
+
+    suspend fun getLesson(id: Long): Lesson? = lessonDao.getLesson(id)
+
+    suspend fun insertLesson(lesson: Lesson) = lessonDao.insert(lesson)
+
+    suspend fun updateLesson(lesson: Lesson) = lessonDao.update(lesson)
+
+    suspend fun deleteLesson(lesson: Lesson) = lessonDao.delete(lesson)
 }

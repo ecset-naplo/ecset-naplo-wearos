@@ -22,6 +22,7 @@ import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.compose.material3.lazy.transformedHeight
 import xyz.nbani.ecsetnaplo.R
+import xyz.nbani.ecsetnaplo.data.local.entity.Teacher
 import xyz.nbani.ecsetnaplo.ui.components.ClickRowElement
 import xyz.nbani.ecsetnaplo.ui.components.sectionHeader
 import xyz.nbani.ecsetnaplo.ui.viewmodels.TimetableViewModel
@@ -31,14 +32,9 @@ fun TeachersScreen(
     viewModel: TimetableViewModel,
     onOpenAddTeacherScreen: () -> Unit,
     onOpenEditTeacherScreen: (Long) -> Unit,
+    popNavStackBack: () -> Unit,
     isEditor: Boolean,
-    onSelectTeacher: (() -> Unit)? = null
 ) {
-    LaunchedEffect(isEditor, onSelectTeacher == null) {
-        if (isEditor && onSelectTeacher == null) {
-            Log.w("TeachersScreen", "onSelectTeacher was not passed even though isEditor is true")
-        }
-    }
 
     val state = rememberTransformingLazyColumnState()
     val spec = rememberTransformationSpec()
@@ -67,7 +63,9 @@ fun TeachersScreen(
                             if (isEditor) {
                                 onOpenEditTeacherScreen(teacher.id)
                             } else {
-                                onSelectTeacher?.invoke()
+                                viewModel.loadTeacher(teacher.id)
+                                Log.d("Teach", "1. $teacher")
+                                popNavStackBack()
                             }
                         },
                         modifier = Modifier.transformedHeight(this, spec),
