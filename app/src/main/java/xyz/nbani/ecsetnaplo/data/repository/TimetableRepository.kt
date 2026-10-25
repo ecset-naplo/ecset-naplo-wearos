@@ -40,9 +40,11 @@ class TimetableRepository(
         val lessonId = irregularPeriod?.lessonId ?: regularPeriod?.lessonId ?: return null
         val lesson = lessonById[lessonId] ?: return null
 
-        if (irregularPeriod != null &&
-            (irregularPeriod.startTime == null || irregularPeriod.endTime == null)
-        ) return null
+        val start = irregularPeriod?.startTime ?: regularPeriod?.startTime ?: return null
+        val end = irregularPeriod?.endTime ?: regularPeriod?.endTime ?: return null
+        if (!end.isAfter(start)) return null
+
+        if ((irregularPeriod?.period ?: regularPeriod?.period) == null) return null
 
         val room = (irregularPeriod?.roomId ?: regularPeriod?.roomId)
             ?.let { roomEntityById[it] }
@@ -56,18 +58,26 @@ class TimetableRepository(
         lessonById: Map<Long, Lesson>,
         roomEntityById: Map<Long, RoomEntity>
     ): List<Period> {
+        val regularById = regularPeriods.associateBy { it.id }
         val replacedRegularPeriodIds = irregularPeriods
             .mapNotNull { it.regularPeriodId }
             .toSet()
 
-        val regularPeriods = regularPeriods
+        val collectedRegularPeriods = regularPeriods
             .filter { it.id !in replacedRegularPeriodIds }
             .mapNotNull { createPeriod(it, null, lessonById, roomEntityById) }
 
-        val irregularPeriods = irregularPeriods
-            .mapNotNull { createPeriod(null, it, lessonById, roomEntityById) }
+        val collectedIrregularPeriods = irregularPeriods
+            .mapNotNull {
+                createPeriod(
+                    regularPeriod = it.regularPeriodId?.let(regularById::get),
+                    irregularPeriod = it,
+                    lessonById,
+                    roomEntityById
+                )
+            }
 
-        return (regularPeriods + irregularPeriods).sortedBy { it.startTime }
+        return (collectedRegularPeriods + collectedIrregularPeriods).sortedBy { it.startTime }
     }
 
     fun observeAllPeriodsOfDate(date: LocalDate): Flow<List<Period>> =
