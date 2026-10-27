@@ -65,5 +65,10 @@
     <string name="arts">Arts</string>
     <string name="geography">Geography</string>
     <string name="other">Other</string>
+    <string name="seconds_left">%1$d seconds</string>
+    <string name="minutes_left">%1$d minutes</string>
+    <string name="minutes_seconds_left">%1$d minutes, %2$d seconds</string>
+    <string name="till_time">(Till %1$s)</string>
+
 
 </resources>

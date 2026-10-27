@@ -66,4 +66,8 @@
     <string name="arts">Rajz</string>
     <string name="geography">Földrajz</string>
     <string name="other">Egyéb</string>
+    <string name="seconds_left">%1$d másodperc</string>
+    <string name="minutes_left">%1$d perc</string>
+    <string name="minutes_seconds_left">%1$d perc, %2$d másodperc</string>
+    <string name="till_time">(%1$s-ig)</string>
 </resources>
