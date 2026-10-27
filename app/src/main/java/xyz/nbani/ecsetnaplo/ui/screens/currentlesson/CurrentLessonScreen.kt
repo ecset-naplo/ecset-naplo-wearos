@@ -31,7 +31,10 @@ fun CurrentLessonScreen(
     ScreenScaffold {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             if (currentPeriod == null) {
-                Text(stringResource(R.string.no_lessons_get_rest))
+                Text(
+                    stringResource(R.string.no_lessons_get_rest),
+                    textAlign = TextAlign.Center
+                )
             } else {
                 val progress = rememberProgress(currentPeriod)
                 val animated by animateFloatAsState(
