@@ -34,15 +34,9 @@ fun RoomsScreen(
     viewModel: TimetableViewModel,
     onOpenAddRoomScreen: () -> Unit,
     onOpenEditRoomScreen: (Long) -> Unit,
+    popNavStackBack: () -> Unit,
     isEditor: Boolean,
-    onSelectRoom: ((RoomEntity) -> Unit)? = null
 ) {
-    LaunchedEffect(isEditor, onSelectRoom == null) {
-        if (isEditor && onSelectRoom == null) {
-            Log.w("RoomsScreen", "onSelectRoom was not passed even though isEditor is true")
-        }
-    }
-
     val state = rememberTransformingLazyColumnState()
     val spec = rememberTransformationSpec()
 
@@ -70,7 +64,8 @@ fun RoomsScreen(
                             if (isEditor) {
                                 onOpenEditRoomScreen(room.id)
                             } else {
-                                onSelectRoom?.invoke(room)
+                                viewModel.loadRoom(room.id)
+                                popNavStackBack()
                             }
                         },
                         modifier = Modifier.transformedHeight(this, spec),

@@ -1,9 +1,11 @@
 package xyz.nbani.ecsetnaplo.data.local.entity
 
+import android.os.Parcelable
 import androidx.room3.Entity
 import androidx.room3.ForeignKey
 import androidx.room3.Index
 import androidx.room3.PrimaryKey
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -35,6 +37,7 @@ import java.time.LocalTime
         Index("lessonId")
     ]
 )
+@Parcelize
 data class IrregularPeriod(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val regularPeriodId: Long? = null,
@@ -44,4 +47,4 @@ data class IrregularPeriod(
     val period: Int? = null,
     val startTime: LocalTime? = null,
     val endTime: LocalTime ? = null
-)
+) : Parcelable

@@ -11,6 +11,8 @@ import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.TimetableScreen
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.AddLesson
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.EditLesson
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.LessonsScreen
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.AddPeriodPicker
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.AddRegularPeriod
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.rooms.AddRoom
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.rooms.EditRoom
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.rooms.RoomsScreen
@@ -57,8 +59,35 @@ fun AppNavHost(
             entry<Destination.Timetable> { key ->
                 TimetableScreen(
                     viewModel = timetableViewModel,
-                    onOpenAddPeriodScreen = { /* TODO: backStack.add(Destination.AddPeriod()) */ },
+                    onOpenAddPeriodPickerScreen = { day, period, startTime, validFrom ->
+                        backStack.add(Destination.AddPeriodPicker(day, period, startTime, validFrom))
+                    },
                     isEditor = key.isEditor
+                )
+            }
+            entry<Destination.AddPeriodPicker> { key ->
+                AddPeriodPicker(
+                    onOpenAddRegularPeriodScreen = {
+                        backStack.add(Destination.AddRegularPeriod(
+                            key.day,
+                            key.period,
+                            key.startTime,
+                            key.validFrom
+                        ))
+                    },
+                    onOpenAddIrregularPeriodScreen = { /* TODO: backStack.add(Destination.AddIrregularPeriod) */ }
+                )
+            }
+            entry<Destination.AddRegularPeriod> { key ->
+                AddRegularPeriod(
+                    viewModel = timetableViewModel,
+                    popNavStackBack = { backStack.removeLastOrNull() },
+                    onOpenRoomsScreen = { isEditor -> backStack.add(Destination.Rooms(isEditor)) },
+                    onOpenLessonsScreen = { isEditor -> backStack.add(Destination.Lessons(isEditor)) },
+                    dayDefault = key.day,
+                    periodDefault = key.period,
+                    startTimeDefault = key.startTime,
+                    validFromDefault = key.validFrom
                 )
             }
 
@@ -68,6 +97,7 @@ fun AppNavHost(
                     viewModel = timetableViewModel,
                     onOpenAddRoomScreen = { backStack.add(Destination.AddRoom) },
                     onOpenEditRoomScreen = { id -> backStack.add(Destination.EditRoom(id)) },
+                    popNavStackBack = { backStack.removeLastOrNull() },
                     isEditor = key.isEditor
                 )
             }
@@ -120,10 +150,9 @@ fun AppNavHost(
             entry<Destination.Lessons> { key ->
                 LessonsScreen(
                     viewModel = timetableViewModel,
-                    onOpenAddLessonScreen = { backStack.add(Destination.AddRoom) },
-                    onOpenEditLessonScreen = { id -> backStack.add(Destination.EditRoom(id)) },
                     onOpenAddLessonScreen = { backStack.add(Destination.AddLesson) },
                     onOpenEditLessonScreen = { id -> backStack.add(Destination.EditLesson(id)) },
+                    popNavStackBack = { backStack.removeLastOrNull() },
                     isEditor = key.isEditor
                 )
             }

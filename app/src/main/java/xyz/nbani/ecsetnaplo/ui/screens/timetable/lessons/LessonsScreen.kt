@@ -31,15 +31,9 @@ fun LessonsScreen(
     viewModel: TimetableViewModel,
     onOpenAddLessonScreen: () -> Unit,
     onOpenEditLessonScreen: (Long) -> Unit,
+    popNavStackBack: () -> Unit,
     isEditor: Boolean,
-    onSelectLesson: (() -> Unit)? = null
 ) {
-    LaunchedEffect(isEditor, onSelectLesson == null) {
-        if (isEditor && onSelectLesson == null) {
-            Log.w("LessonsScreen", "onSelectLesson was not passed even though isEditor is true")
-        }
-    }
-
     val state = rememberTransformingLazyColumnState()
     val spec = rememberTransformationSpec()
 
@@ -68,7 +62,8 @@ fun LessonsScreen(
                             if (isEditor) {
                                 onOpenEditLessonScreen(lesson.id)
                             } else {
-                                onSelectLesson?.invoke()
+                                viewModel.loadLesson(lesson.id)
+                                popNavStackBack()
                             }
                         },
                         modifier = Modifier.transformedHeight(this, spec),

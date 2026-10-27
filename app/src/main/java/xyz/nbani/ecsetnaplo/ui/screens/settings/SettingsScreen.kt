@@ -68,7 +68,7 @@ fun SettingsScreen(
                     title = stringResource(R.string.manage_timetable),
                     subtitle = stringResource(R.string.manage_timetable_button_subtitle),
                     onClick = {
-
+                        onOpenTimetable(true)
                     },
                     modifier = Modifier.transformedHeight(this, spec),
                     transformation = SurfaceTransformation(spec)

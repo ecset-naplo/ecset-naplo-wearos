@@ -119,6 +119,30 @@ class TimetableRepository(
             .distinctUntilChanged()
     }
 
+    // Regular period related functions
+    suspend fun getRegularPeriod(id: Long): RegularPeriod? = timetableDao.getRegularPeriod(id)
+
+    suspend fun insertRegularPeriod(period: RegularPeriod) =
+        timetableDao.insertRegularPeriod(period)
+
+    suspend fun updateRegularPeriod(period: RegularPeriod) =
+        timetableDao.updateRegularPeriod(period)
+
+    suspend fun deleteRegularPeriod(period: RegularPeriod) =
+        timetableDao.deleteRegularPeriod(period)
+
+
+    // Irregular period related functions
+    suspend fun insertIrregularPeriod(period: IrregularPeriod) =
+        timetableDao.insertIrregularPeriod(period)
+
+    suspend fun updateIrregularPeriod(period: IrregularPeriod) =
+        timetableDao.updateIrregularPeriod(period)
+
+    suspend fun deleteIrregularPeriod(period: IrregularPeriod) =
+        timetableDao.insertIrregularPeriod(period)
+
+
     // Room related functions
     fun observeAllRooms(): Flow<List<RoomEntity>> = roomDao.observeRooms()
 

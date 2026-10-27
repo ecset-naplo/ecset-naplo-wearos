@@ -10,8 +10,7 @@ import kotlinx.coroutines.delay
 import xyz.nbani.ecsetnaplo.data.model.Period
 import java.time.LocalTime
 import java.time.Duration as JavaDuration
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun rememberProgress(period: Period): Float {

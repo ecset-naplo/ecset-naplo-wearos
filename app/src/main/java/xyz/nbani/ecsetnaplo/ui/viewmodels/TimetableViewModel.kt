@@ -17,7 +17,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import xyz.nbani.ecsetnaplo.EcsetApp
+import xyz.nbani.ecsetnaplo.data.local.entity.IrregularPeriod
 import xyz.nbani.ecsetnaplo.data.local.entity.Lesson
+import xyz.nbani.ecsetnaplo.data.local.entity.RegularPeriod
 import xyz.nbani.ecsetnaplo.data.local.entity.RoomEntity
 import xyz.nbani.ecsetnaplo.data.local.entity.Teacher
 import xyz.nbani.ecsetnaplo.data.model.Period
@@ -49,6 +51,45 @@ class TimetableViewModel(
 
     fun selectDate(date: LocalDate) {
         selectedDate.value = date
+    }
+
+    // Regular period
+    var regularPeriod by mutableStateOf<RegularPeriod?>(null)
+        private set
+
+    fun loadRegularPeriod(id: Long)  {
+        regularPeriod = null
+        viewModelScope.launch {
+            regularPeriod = repository.getRegularPeriod(id)
+        }
+    }
+
+    fun clearRegularPeriod() { regularPeriod = null }
+
+    fun insertRegularPeriod(period: RegularPeriod) = viewModelScope.launch {
+        repository.insertRegularPeriod(period)
+    }
+
+    fun updateRegularPeriod(period: RegularPeriod) = viewModelScope.launch {
+        repository.updateRegularPeriod(period)
+    }
+
+    fun deleteRegularPeriod(period: RegularPeriod) = viewModelScope.launch {
+        repository.deleteRegularPeriod(period)
+    }
+
+
+    // Irregular period
+    fun insertIrregularPeriod(period: IrregularPeriod) = viewModelScope.launch {
+        repository.insertIrregularPeriod(period)
+    }
+
+    fun updateIrregularPeriod(period: IrregularPeriod) = viewModelScope.launch {
+        repository.insertIrregularPeriod(period)
+    }
+
+    fun deleteIrregularPeriod(period: IrregularPeriod) = viewModelScope.launch {
+        repository.insertIrregularPeriod(period)
     }
 
     // Room

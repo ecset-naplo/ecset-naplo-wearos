@@ -1,9 +1,11 @@
 package xyz.nbani.ecsetnaplo.data.local.entity
 
+import android.os.Parcelable
 import androidx.room3.Entity
 import androidx.room3.ForeignKey
 import androidx.room3.Index
 import androidx.room3.PrimaryKey
+import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -30,6 +32,7 @@ import java.time.LocalTime
         Index(value = ["weekday", "period",])
     ]
 )
+@Parcelize
 data class RegularPeriod(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val lessonId: Long,
@@ -40,4 +43,4 @@ data class RegularPeriod(
     val endTime: LocalTime,
     val validFrom: LocalDate,
     val validTo: LocalDate? = null
-)
+) : Parcelable
