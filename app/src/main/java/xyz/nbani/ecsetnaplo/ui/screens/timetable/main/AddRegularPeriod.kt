@@ -1,22 +1,15 @@
 package xyz.nbani.ecsetnaplo.ui.screens.timetable.main
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.AccessTimeFilled
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.runtime.Composable
@@ -27,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -37,16 +29,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
-import androidx.wear.compose.material3.DatePicker
-import androidx.wear.compose.material3.EdgeButton
-import androidx.wear.compose.material3.Icon
-import androidx.wear.compose.material3.MaterialTheme
-import androidx.wear.compose.material3.Picker
 import androidx.wear.compose.material3.ScreenScaffold
-import androidx.wear.compose.material3.Stepper
 import androidx.wear.compose.material3.SurfaceTransformation
-import androidx.wear.compose.material3.Text
-import androidx.wear.compose.material3.TimePicker
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.compose.material3.lazy.transformedHeight
 import androidx.wear.compose.material3.rememberPickerState
@@ -56,6 +40,10 @@ import xyz.nbani.ecsetnaplo.data.local.entity.RegularPeriod
 import xyz.nbani.ecsetnaplo.data.local.entity.RoomEntity
 import xyz.nbani.ecsetnaplo.ui.components.ClickRowElement
 import xyz.nbani.ecsetnaplo.ui.components.sectionHeader
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.pickers.DayPicker
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.pickers.PeriodIndexPicker
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.pickers.StartEndTimePicker
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.pickers.ValidFromToPicker
 import xyz.nbani.ecsetnaplo.ui.viewmodels.TimetableViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -156,279 +144,218 @@ fun AddRegularPeriod(
     ScreenScaffold(
         scrollState = state
     ) { contentPadding ->
-        if (
-            !showDayPicker &&
-            !showPeriodPicker &&
-            !showStartTimePicker &&
-            !showEndTimePicker &&
-            !showValidFromPicker &&
-            !showValidToPicker
+        TransformingLazyColumn(
+            state = state,
+            contentPadding = contentPadding.let {
+                PaddingValues(
+                    start = it.calculateStartPadding(LayoutDirection.Ltr),
+                    top = it.calculateTopPadding(),
+                    end = it.calculateEndPadding(LayoutDirection.Ltr),
+                    bottom = it.calculateBottomPadding() + 26.dp
+                )
+            },
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            TransformingLazyColumn(
-                state = state,
-                contentPadding = contentPadding.let {
-                    PaddingValues(
-                        start = it.calculateStartPadding(LayoutDirection.Ltr),
-                        top = it.calculateTopPadding(),
-                        end = it.calculateEndPadding(LayoutDirection.Ltr),
-                        bottom = it.calculateBottomPadding() + 26.dp
-                    )
-                },
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                sectionHeader(R.string.lesson)
-                item {
-                    ClickRowElement(
-                        modifier = Modifier.transformedHeight(this, spec),
-                        transformation = SurfaceTransformation(spec),
-                        icon = Icons.Default.AccessTime,
-                        title = selectedLesson?.longSubjectName
-                            ?: stringResource(R.string.select_lesson),
-                        enabled = elementsEnabled,
-                        onClick = {
-                            navigating = true
-                            onOpenLessonsScreen(false)
+            sectionHeader(R.string.lesson)
+            item {
+                ClickRowElement(
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec),
+                    icon = Icons.Default.AccessTime,
+                    title = selectedLesson?.longSubjectName
+                        ?: stringResource(R.string.select_lesson),
+                    enabled = elementsEnabled,
+                    onClick = {
+                        navigating = true
+                        onOpenLessonsScreen(false)
+                    }
+                )
+            }
+
+            sectionHeader(R.string.room_optional)
+            item {
+                ClickRowElement(
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec),
+                    icon = Icons.Default.Groups,
+                    title = selectedRoom?.name ?: stringResource(R.string.select_room),
+                    enabled = elementsEnabled,
+                    onClick = {
+                        navigating = true
+                        onOpenRoomsScreen(false)
+                    }
+                )
+            }
+
+            sectionHeader(R.string.day_and_period)
+            item {
+                ClickRowElement(
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec),
+                    icon = Icons.Default.WbSunny,
+                    title = day.getDisplayName(TextStyle.FULL, locale),
+                    enabled = elementsEnabled,
+                    onClick = { showDayPicker = true }
+                )
+            }
+            item {
+                ClickRowElement(
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec),
+                    icon = Icons.Default.FormatListNumbered,
+                    title = period.toString(),
+                    enabled = elementsEnabled,
+                    onClick = { showPeriodPicker = true }
+                )
+            }
+
+            sectionHeader(R.string.start_time)
+            item {
+                ClickRowElement(
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec),
+                    icon = Icons.Default.AccessTime,
+                    title = startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
+                    enabled = elementsEnabled,
+                    onClick = { showStartTimePicker = true }
+                )
+            }
+
+            sectionHeader(R.string.end_time_optional)
+            item {
+                ClickRowElement(
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec),
+                    icon = Icons.Default.AccessTimeFilled,
+                    title = endTime?.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+                        ?: stringResource(R.string.select_end_time),
+                    enabled = elementsEnabled,
+                    onClick = { showEndTimePicker = true }
+                )
+            }
+
+            sectionHeader(R.string.valid_from)
+            item {
+                ClickRowElement(
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec),
+                    icon = Icons.Outlined.CalendarMonth,
+                    title = validFrom.format(
+                        DateTimeFormatter
+                            .ofLocalizedDate(FormatStyle.MEDIUM)
+                            .withLocale(locale)
+                    ),
+                    enabled = elementsEnabled,
+                    onClick = { showValidFromPicker = true }
+                )
+            }
+
+            sectionHeader(R.string.valid_to_optional)
+            item {
+                ClickRowElement(
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec),
+                    icon = Icons.Outlined.CalendarMonth,
+                    title = validTo?.format(
+                        DateTimeFormatter
+                            .ofLocalizedDate(FormatStyle.MEDIUM)
+                            .withLocale(locale)
+                    ) ?: stringResource(R.string.select_valid_to),
+                    enabled = elementsEnabled,
+                    onClick = { showValidToPicker = true }
+                )
+            }
+
+            item {
+                ClickRowElement(
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec),
+                    icon = Icons.Default.Add,
+                    title = stringResource(R.string.add_period),
+                    enabled = elementsEnabled,
+                    onClick = {
+                        val lessonId = selectedLesson?.id
+                        val lessonEndTime = endTime
+
+                        if (lessonId == null || lessonEndTime == null) {
+                            showfieldsMissingDialog = true
+                            return@ClickRowElement
                         }
-                    )
-                }
 
-                sectionHeader(R.string.room_optional)
-                item {
-                    ClickRowElement(
-                        modifier = Modifier.transformedHeight(this, spec),
-                        transformation = SurfaceTransformation(spec),
-                        icon = Icons.Default.Groups,
-                        title = selectedRoom?.name ?: stringResource(R.string.select_room),
-                        enabled = elementsEnabled,
-                        onClick = {
-                            navigating = true
-                            onOpenRoomsScreen(false)
+                        if (selectedRoom == null) {
+                            showRoomMissingWarningDialog = true
+                            return@ClickRowElement
                         }
-                    )
-                }
 
-                sectionHeader(R.string.day_and_period)
-                item {
-                    ClickRowElement(
-                        modifier = Modifier.transformedHeight(this, spec),
-                        transformation = SurfaceTransformation(spec),
-                        icon = Icons.Default.WbSunny,
-                        title = day.getDisplayName(TextStyle.FULL, locale),
-                        enabled = elementsEnabled,
-                        onClick = { showDayPicker = true }
-                    )
-                }
-                item {
-                    ClickRowElement(
-                        modifier = Modifier.transformedHeight(this, spec),
-                        transformation = SurfaceTransformation(spec),
-                        icon = Icons.Default.FormatListNumbered,
-                        title = period.toString(),
-                        enabled = elementsEnabled,
-                        onClick = { showPeriodPicker = true }
-                    )
-                }
-
-                sectionHeader(R.string.start_time)
-                item {
-                    ClickRowElement(
-                        modifier = Modifier.transformedHeight(this, spec),
-                        transformation = SurfaceTransformation(spec),
-                        icon = Icons.Default.AccessTime,
-                        title = startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
-                        enabled = elementsEnabled,
-                        onClick = { showStartTimePicker = true }
-                    )
-                }
-
-                sectionHeader(R.string.end_time_optional)
-                item {
-                    ClickRowElement(
-                        modifier = Modifier.transformedHeight(this, spec),
-                        transformation = SurfaceTransformation(spec),
-                        icon = Icons.Default.AccessTimeFilled,
-                        title = endTime?.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-                            ?: stringResource(R.string.select_end_time),
-                        enabled = elementsEnabled,
-                        onClick = { showEndTimePicker = true }
-                    )
-                }
-
-                sectionHeader(R.string.valid_from)
-                item {
-                    ClickRowElement(
-                        modifier = Modifier.transformedHeight(this, spec),
-                        transformation = SurfaceTransformation(spec),
-                        icon = Icons.Outlined.CalendarMonth,
-                        title = validFrom.format(
-                            DateTimeFormatter
-                                .ofLocalizedDate(FormatStyle.MEDIUM)
-                                .withLocale(locale)
-                        ),
-                        enabled = elementsEnabled,
-                        onClick = { showValidFromPicker = true }
-                    )
-                }
-
-                sectionHeader(R.string.valid_to_optional)
-                item {
-                    ClickRowElement(
-                        modifier = Modifier.transformedHeight(this, spec),
-                        transformation = SurfaceTransformation(spec),
-                        icon = Icons.Outlined.CalendarMonth,
-                        title = validTo?.format(
-                            DateTimeFormatter
-                                .ofLocalizedDate(FormatStyle.MEDIUM)
-                                .withLocale(locale)
-                        ) ?: stringResource(R.string.select_valid_to),
-                        enabled = elementsEnabled,
-                        onClick = { showValidToPicker = true }
-                    )
-                }
-
-                item {
-                    ClickRowElement(
-                        modifier = Modifier.transformedHeight(this, spec),
-                        transformation = SurfaceTransformation(spec),
-                        icon = Icons.Default.Add,
-                        title = stringResource(R.string.add_period),
-                        enabled = elementsEnabled,
-                        onClick = {
-                            val lessonId = selectedLesson?.id
-                            val lessonEndTime = endTime
-
-                            if (lessonId == null || lessonEndTime == null) {
-                                showfieldsMissingDialog = true
-                                return@ClickRowElement
-                            }
-
-                            if (selectedRoom == null) {
-                                showRoomMissingWarningDialog = true
-                                return@ClickRowElement
-                            }
-
-                            addRegularPeriod(
-                                lessonId,
-                                selectedRoom?.id,
-                                days[pickerState.selectedOptionIndex],
-                                period = period,
-                                startTime = startTime,
-                                endTime = lessonEndTime,
-                                validFrom = validFrom,
-                                validTo = validTo
-                            )
-                        }
-                    )
-                }
+                        addRegularPeriod(
+                            lessonId,
+                            selectedRoom?.id,
+                            days[pickerState.selectedOptionIndex],
+                            period = period,
+                            startTime = startTime,
+                            endTime = lessonEndTime,
+                            validFrom = validFrom,
+                            validTo = validTo
+                        )
+                    }
+                )
             }
         }
 
         // show period index picker
         if (showPeriodPicker) {
-            BackHandler { showPeriodPicker = false }
-            Box(Modifier.fillMaxSize()) {
-                Stepper(
-                    value = period,
-                    onValueChange = { period = it },
-                    valueProgression = 0..100,
-                    decreaseIcon = {
-                        Icon(
-                            Icons.Default.Remove,
-                            contentDescription = stringResource(R.string.decrease)
-                        )
-                    },
-                    increaseIcon = {
-                        Icon(
-                            Icons.Default.Add,
-                            contentDescription = stringResource(R.string.increase)
-                        )
-                    }
-                ) { Text("$period") }
-            }
+            PeriodIndexPicker(
+                periodIndex = period,
+                onDismissRequest = { showPeriodPicker = false },
+                onValueChange = { period = it }
+            )
         }
 
         // show day picker
         if (showDayPicker) {
-            BackHandler { day = days[pickerState.selectedOptionIndex]; showDayPicker = false }
-            Box {
-                Picker(
-                    verticalSpacing = 16.dp,
-                    state = pickerState,
-                    contentDescription = { pickerDescription },
-                    modifier = Modifier.align(Alignment.Center)
-                ) { index ->
-                    val selected = index == pickerState.selectedOptionIndex
-                    Text(
-                        daysName[index],
-                        style = if (selected) MaterialTheme.typography.titleLarge
-                                else MaterialTheme.typography.bodyMedium
-                    )
-                }
-                EdgeButton(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    onClick = { day = days[pickerState.selectedOptionIndex]; showDayPicker = false }
-                ) {
-                    Icon(
-                        Icons.Default.Check,
-                        contentDescription = stringResource(R.string.confirm)
-                    )
-                }
-            }
+            DayPicker(
+                pickerState = pickerState,
+                pickerDescription = pickerDescription,
+                daysName = daysName,
+                onClick = { day = days[pickerState.selectedOptionIndex]; showDayPicker = false },
+                onDismissRequest = { day = days[pickerState.selectedOptionIndex]; showDayPicker = false }
+            )
         }
 
         // show start time picker
         if (showStartTimePicker) {
-            BackHandler { showStartTimePicker = false }
-            Box {
-                TimePicker(
-                    initialTime = startTime, onTimePicked = {
-                        startTime = it
-                        showStartTimePicker = false
-                    }
-                )
-            }
+            StartEndTimePicker(
+                initialTime = startTime,
+                onTimePicked = { startTime = it; showStartTimePicker = false},
+                onDismissRequest = { showStartTimePicker }
+            )
         }
 
         // show end time picker
         if (showEndTimePicker) {
-            BackHandler { showEndTimePicker = false }
-            Box {
-                TimePicker(
-                    initialTime = endTime ?: LocalTime.now(),
-                    onTimePicked = {
-                        endTime = it
-                        showEndTimePicker = false
-                    }
-                )
-            }
+            StartEndTimePicker(
+                initialTime = endTime ?: LocalTime.now(),
+                onTimePicked = { endTime = it; showEndTimePicker = false },
+                onDismissRequest = { showEndTimePicker = false }
+            )
         }
 
         // show valid from date picker
         if (showValidFromPicker) {
-            BackHandler { showValidFromPicker = false }
-            Box {
-                DatePicker(
-                    initialDate = validFrom,
-                    onDatePicked = {
-                        validFrom = it
-                        showValidFromPicker = false
-                    }
-                )
-            }
+            ValidFromToPicker(
+                initialDate = validFrom,
+                onDatePicked = { validFrom = it; showValidFromPicker = false },
+                onDismissRequest = { showValidFromPicker = false }
+            )
         }
 
         // show valid to date picker
         if (showValidToPicker) {
-            BackHandler { showValidToPicker = false }
-            Box {
-                DatePicker(
-                    initialDate = validTo ?: validFrom,
-                    onDatePicked = {
-                        validTo = it
-                        showValidToPicker = false
-                    }
-                )
-            }
+            ValidFromToPicker(
+                initialDate = validTo ?: validFrom,
+                onDatePicked = { validTo = it; showValidToPicker = false },
+                onDismissRequest = { showValidToPicker = false }
+            )
         }
 
         // no room specified warning dialog
