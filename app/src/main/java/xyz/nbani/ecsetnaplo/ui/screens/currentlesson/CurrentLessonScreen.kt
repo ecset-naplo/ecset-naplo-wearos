@@ -45,7 +45,10 @@ fun CurrentLessonScreen(
                     modifier = Modifier.fillMaxSize(),
                 )
 
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     Icon(
                         currentPeriod.lesson.lessonType.icon, null
                     )
