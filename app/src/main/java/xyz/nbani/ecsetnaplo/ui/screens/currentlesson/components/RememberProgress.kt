@@ -20,7 +20,7 @@ fun rememberProgress(period: Period): Float {
     LaunchedEffect(period) {
         while (true) {
             now = LocalTime.now()
-            delay(1.milliseconds)
+            delay(1.seconds)
         }
     }
 
