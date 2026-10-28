@@ -161,7 +161,7 @@ fun AddRegularPeriod(
                 ClickRowElement(
                     modifier = Modifier.transformedHeight(this, spec),
                     transformation = SurfaceTransformation(spec),
-                    icon = Icons.Default.AccessTime,
+                    icon = selectedLesson?.lessonType?.icon ?: Icons.Default.AccessTime,
                     title = selectedLesson?.longSubjectName
                         ?: stringResource(R.string.select_lesson),
                     enabled = elementsEnabled,
