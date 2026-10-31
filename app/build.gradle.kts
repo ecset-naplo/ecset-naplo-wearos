@@ -26,11 +26,17 @@ android {
 
     }
 
-    buildTypes {
-        release {
-            optimization {
-                enable = true
-                packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
+    android {
+        buildTypes {
+            debug {
+                applicationIdSuffix = ".debug"
+                versionNameSuffix = "-debug"
+            }
+            release {
+                optimization {
+                    packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
+                    enable = true
+                }
             }
         }
     }
