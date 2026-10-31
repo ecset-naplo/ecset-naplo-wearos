@@ -14,3 +14,7 @@
 .cxx
 local.properties
 .idea/
+*.jks
+*.keystore
+keystore.properties
+app/release/
