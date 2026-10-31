@@ -368,6 +368,7 @@ fun EditPeriod(
                                 )
                                 viewModel.updateIrregularPeriod(updatedIrregularPeriod)
                                 popNavStackBack()
+                                popNavStackBack()
                             } else {
                                 val updatedRegularPeriod = checkNotNull(period.regularPeriod) {
                                     "Regular period is null when editing regular period!"
@@ -382,6 +383,7 @@ fun EditPeriod(
                                     validTo = validTo ?: period.regularPeriod.validTo
                                 )
                                 viewModel.updateRegularPeriod(updatedRegularPeriod)
+                                popNavStackBack()
                                 popNavStackBack()
                             }
                         }

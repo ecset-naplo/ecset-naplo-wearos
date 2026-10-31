@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Deleting a period would return to its old details
+- When saving an edited period, it would navigate only once (returning to its old details) instead of twice
 
 ## [0.1.0-beta.1] - 2026-10-31
 
