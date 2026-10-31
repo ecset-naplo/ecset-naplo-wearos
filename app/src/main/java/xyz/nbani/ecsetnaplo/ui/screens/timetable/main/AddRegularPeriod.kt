@@ -139,6 +139,7 @@ fun AddRegularPeriod(
             )
         )
         popNavStackBack()
+        popNavStackBack()
     }
 
     ScreenScaffold(
