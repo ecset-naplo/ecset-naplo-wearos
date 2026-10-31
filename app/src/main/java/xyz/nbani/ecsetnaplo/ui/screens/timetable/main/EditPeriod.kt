@@ -485,9 +485,13 @@ fun EditPeriod(
             DeleteConfirmationDialog(
                 onConfirm = {
                     if (period?.regularPeriod != null) {
-                        viewModel.deleteRegularPeriod(period.regularPeriod); popNavStackBack()
+                        viewModel.deleteRegularPeriod(period.regularPeriod)
+                        popNavStackBack()
+                        popNavStackBack()
                     } else if (period?.irregularPeriod != null) {
-                        viewModel.deleteIrregularPeriod(period.irregularPeriod); popNavStackBack()
+                        viewModel.deleteIrregularPeriod(period.irregularPeriod)
+                        popNavStackBack()
+                        popNavStackBack()
                     }
                 },
                 onDismiss = { showDeleteConfirmDialog = false },
