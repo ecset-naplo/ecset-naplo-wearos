@@ -133,6 +133,8 @@ class TimetableRepository(
 
 
     // Irregular period related functions
+    suspend fun getIrregularPeriod(id: Long): IrregularPeriod? = timetableDao.getIrregularPeriod(id)
+
     suspend fun insertIrregularPeriod(period: IrregularPeriod) =
         timetableDao.insertIrregularPeriod(period)
 

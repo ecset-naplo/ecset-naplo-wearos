@@ -97,4 +97,13 @@
     <string name="minutes_left">%1$d perc</string>
     <string name="minutes_seconds_left">%1$d perc, %2$d másodperc</string>
     <string name="till_time">(%1$s-ig)</string>
+    <string name="only_this_day">Csak ezen a napon</string>
+    <string name="every_week">Minden héten</string>
+    <string name="edit_period">Tanóra szerkesztése</string>
+    <string name="delete_regular_period">Rendes tanóra törlése</string>
+    <string name="regular_period_delete_confirmation">Biztos vagy benne hogy ki szeretnéd ezt a rendes tanórát törölni? Ez a művelet nem vonható vissza, és a hozzátartozó rendhagyó tanórák is ki lesznek törölve!</string>
+    <string name="delete_irregular_period">Rendhagyó óra törlése</string>
+    <string name="irregular_period_delete_confirmation">Biztos vagy benne hogy ki szeretnéd ezt a rendhafgyó tanórát törölni? Ez a művelet nem vonható vissza!</string>
+    <string name="period">Óraszám</string>
+    <string name="no_room">Nincs szoba</string>
 </resources>

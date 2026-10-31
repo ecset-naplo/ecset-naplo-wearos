@@ -2,6 +2,7 @@ package xyz.nbani.ecsetnaplo.ui.screens.timetable.components
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -37,6 +38,7 @@ fun DayPage(
     viewModel: TimetableViewModel,
     date: LocalDate,
     onOpenAddPeriodPickerScreen: (DayOfWeek, Int, LocalTime, LocalDate) -> Unit,
+    onOpenPeriodDetailsScreen: (LocalDate) -> Unit,
     isEditor: Boolean = false
 ) {
     val state = rememberTransformingLazyColumnState()
@@ -69,7 +71,10 @@ fun DayPage(
                     val periodItem = periodItems[index]
                     PeriodCard(
                         periodItem = periodItem,
-                        onClick = {  },
+                        onClick = {
+                            viewModel.loadPeriod(periodItem.period)
+                            onOpenPeriodDetailsScreen(date)
+                        },
                         modifier = Modifier.transformedHeight(this, spec),
                         transformation = SurfaceTransformation(spec)
                     )

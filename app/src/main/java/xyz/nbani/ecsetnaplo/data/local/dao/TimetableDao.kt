@@ -37,6 +37,9 @@ interface TimetableDao {
     @Query("SELECT * FROM irregular_periods WHERE date = :date")
     fun observeIrregularPeriodsOfDate(date: LocalDate): Flow<List<IrregularPeriod>>
 
+    @Query("SELECT * FROM irregular_periods WHERE id = :id")
+    suspend fun getIrregularPeriod(id: Long): IrregularPeriod?
+
     @Insert
     suspend fun insertIrregularPeriod(irregularPeriod: IrregularPeriod)
 

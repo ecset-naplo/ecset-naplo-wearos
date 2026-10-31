@@ -97,6 +97,15 @@
     <string name="minutes_left">%1$d minutes</string>
     <string name="minutes_seconds_left">%1$d minutes, %2$d seconds</string>
     <string name="till_time">(Till %1$s)</string>
+    <string name="only_this_day">Only this day</string>
+    <string name="every_week">Every week</string>
+    <string name="edit_period">Edit period</string>
+    <string name="delete_regular_period">Delete regular period</string>
+    <string name="regular_period_delete_confirmation">Are you sure you would like to delete the regular period? This action cannot be undone, and all irregular periods associated will also be deleted!</string>
+    <string name="delete_irregular_period">Delete irregular period</string>
+    <string name="irregular_period_delete_confirmation">Are you sure you would like to delete the irregular period? This action cannot be undone!</string>
+    <string name="period">Period</string>
+    <string name="no_room">No room</string>
 
 
 </resources>

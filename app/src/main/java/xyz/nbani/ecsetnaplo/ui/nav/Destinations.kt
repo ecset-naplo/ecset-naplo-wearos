@@ -15,7 +15,9 @@ sealed interface Destination : NavKey {
 
     // Timetable routes
     @Serializable data class Timetable(val isEditor: Boolean) : Destination
-
+    @Serializable data class PeriodDetails(
+        @Serializable(with = LocalDateSerializer::class) val date: LocalDate
+    ) : Destination
     @Serializable data class AddPeriodPicker(
         val day: DayOfWeek,
         val period: Int,
@@ -29,6 +31,9 @@ sealed interface Destination : NavKey {
         val period: Int,
         @Serializable(with = LocalTimeSerializer::class) val startTime: LocalTime,
         @Serializable(with = LocalDateSerializer::class) val validFrom: LocalDate
+    ) : Destination
+    @Serializable data class EditPeriod(
+       @Serializable(with = LocalDateSerializer::class) val dateDefault: LocalDate
     ) : Destination
 
     // Rooms screen

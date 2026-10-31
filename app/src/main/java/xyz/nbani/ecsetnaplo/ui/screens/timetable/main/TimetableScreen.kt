@@ -24,6 +24,7 @@ import java.time.temporal.ChronoUnit
 fun TimetableScreen(
     viewModel: TimetableViewModel,
     onOpenAddPeriodPickerScreen: (DayOfWeek, Int, LocalTime, LocalDate) -> Unit,
+    onOpenPeriodDetailsScreen: (LocalDate) -> Unit,
     isEditor: Boolean,
 ) {
     val weekStart = remember { LocalDate.now().with(DayOfWeek.MONDAY) }
@@ -48,7 +49,13 @@ fun TimetableScreen(
     ) { page ->
         val date = weekStart.plusDays(page.toLong())
         AnimatedPage(pageIndex = page, pagerState = pagerState) {
-            DayPage(viewModel, date, onOpenAddPeriodPickerScreen, isEditor)
+            DayPage(
+                viewModel,
+                date,
+                onOpenAddPeriodPickerScreen,
+                onOpenPeriodDetailsScreen,
+                isEditor
+            )
         }
     }
 }

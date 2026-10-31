@@ -13,6 +13,8 @@ import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.EditLesson
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.LessonsScreen
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.AddPeriodPicker
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.AddRegularPeriod
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.EditPeriod
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.PeriodDetails
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.rooms.AddRoom
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.rooms.EditRoom
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.rooms.RoomsScreen
@@ -62,7 +64,14 @@ fun AppNavHost(
                     onOpenAddPeriodPickerScreen = { day, period, startTime, validFrom ->
                         backStack.add(Destination.AddPeriodPicker(day, period, startTime, validFrom))
                     },
+                    onOpenPeriodDetailsScreen = { date -> backStack.add(Destination.PeriodDetails(date)) },
                     isEditor = key.isEditor
+                )
+            }
+            entry<Destination.PeriodDetails> { key ->
+                PeriodDetails(
+                    viewModel = timetableViewModel,
+                    onOpenPeriodEditor = { backStack.add(Destination.EditPeriod(dateDefault = key.date)) }
                 )
             }
             entry<Destination.AddPeriodPicker> { key ->
@@ -88,6 +97,15 @@ fun AppNavHost(
                     periodDefault = key.period,
                     startTimeDefault = key.startTime,
                     validFromDefault = key.validFrom
+                )
+            }
+            entry<Destination.EditPeriod> { key ->
+                EditPeriod(
+                    viewModel = timetableViewModel,
+                    popNavStackBack = { backStack.removeLastOrNull() },
+                    onOpenRoomsScreen = { isEditor -> backStack.add(Destination.Rooms(isEditor)) },
+                    onOpenLessonsScreen = { isEditor -> backStack.add(Destination.Lessons(isEditor)) },
+                    dateDefault = key.dateDefault
                 )
             }
 

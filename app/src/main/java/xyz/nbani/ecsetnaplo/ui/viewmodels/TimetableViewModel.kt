@@ -53,6 +53,15 @@ class TimetableViewModel(
         selectedDate.value = date
     }
 
+
+    // Period entity
+    var period by mutableStateOf<Period?>(null)
+        private set
+
+    fun loadPeriod(periodValue: Period) { period = periodValue }
+
+    fun clearPeriod() { period = null }
+
     // Regular period
     var regularPeriod by mutableStateOf<RegularPeriod?>(null)
         private set
@@ -80,6 +89,18 @@ class TimetableViewModel(
 
 
     // Irregular period
+    var irregularPeriod by mutableStateOf<IrregularPeriod?>(null)
+        private set
+
+    fun loadIrregularPeriod(id: Long) {
+        irregularPeriod = null
+        viewModelScope.launch {
+            irregularPeriod = repository.getIrregularPeriod(id)
+        }
+    }
+
+    fun clearIrregularPeriod() { irregularPeriod = null }
+
     fun insertIrregularPeriod(period: IrregularPeriod) = viewModelScope.launch {
         repository.insertIrregularPeriod(period)
     }
