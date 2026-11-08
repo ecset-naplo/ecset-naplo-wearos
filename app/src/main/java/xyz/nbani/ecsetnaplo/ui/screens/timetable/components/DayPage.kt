@@ -8,6 +8,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -26,6 +29,7 @@ import androidx.wear.compose.material3.lazy.transformedHeight
 import xyz.nbani.ecsetnaplo.R
 import xyz.nbani.ecsetnaplo.ui.components.ClickRowElement
 import xyz.nbani.ecsetnaplo.ui.components.sectionHeader
+import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.pickers.ValidFromToPicker
 import xyz.nbani.ecsetnaplo.ui.viewmodels.TimetableViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -39,12 +43,15 @@ fun DayPage(
     date: LocalDate,
     onOpenAddPeriodPickerScreen: (DayOfWeek, Int, LocalTime, LocalDate) -> Unit,
     onOpenPeriodDetailsScreen: (LocalDate) -> Unit,
+    onChangeDate: (LocalDate) -> Unit,
     isEditor: Boolean = false
 ) {
     val state = rememberTransformingLazyColumnState()
     val spec = rememberTransformationSpec()
 
     val periodItems by viewModel.periods.collectAsStateWithLifecycle()
+
+    var showDatePicker by remember { mutableStateOf(false) }
 
     val locale = LocalConfiguration.current.locales[0]
     val dateText = date.format(
@@ -61,7 +68,14 @@ fun DayPage(
             contentPadding = contentPadding,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            sectionHeader(dateText)
+            sectionHeader(
+                dateText,
+                Modifier.clickable(
+                    onClick = {
+                        showDatePicker = true
+                    }
+                )
+            )
 
             Log.d("Period", date.toString())
             if (periodItems.isEmpty()) {
@@ -103,6 +117,15 @@ fun DayPage(
                     )
                 }
             }
+        }
+
+        // show date picker
+        if (showDatePicker) {
+            ValidFromToPicker(
+                initialDate = date,
+                onDatePicked = { onChangeDate(it); showDatePicker = false },
+                onDismissRequest = { showDatePicker = false }
+            )
         }
     }
 

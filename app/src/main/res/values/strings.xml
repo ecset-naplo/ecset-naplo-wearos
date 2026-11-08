@@ -106,6 +106,7 @@
     <string name="irregular_period_delete_confirmation">Are you sure you would like to delete the irregular period? This action cannot be undone!</string>
     <string name="period">Period</string>
     <string name="no_room">No room</string>
+    <string name="break_then">Break, then:</string>
 
 
 </resources>

@@ -23,7 +23,7 @@ import xyz.nbani.ecsetnaplo.data.local.entity.RegularPeriod
 import xyz.nbani.ecsetnaplo.data.local.entity.RoomEntity
 import xyz.nbani.ecsetnaplo.data.local.entity.Teacher
 import xyz.nbani.ecsetnaplo.data.model.Period
-import xyz.nbani.ecsetnaplo.data.model.PeriodItem
+import xyz.nbani.ecsetnaplo.data.model.TimetableEntry
 import xyz.nbani.ecsetnaplo.data.repository.TimetableRepository
 import java.time.LocalDate
 
@@ -35,18 +35,37 @@ class TimetableViewModel(
 
     val date: StateFlow<LocalDate> = selectedDate
 
-    val periods: StateFlow<List<PeriodItem>> = selectedDate
+    val periods: StateFlow<List<TimetableEntry.PeriodItem>> = selectedDate
         .flatMapLatest { date ->
             combine(
                 repository.observeAllPeriodsOfDate(date),
                 repository.observeCurrentPeriod()
             ) { periods, current ->
-                periods.map { PeriodItem(it, isCurrent = it == current) }
+                periods.map { TimetableEntry.PeriodItem(it, isCurrent = it == current) }
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5), emptyList())
+
+    val periodsAndBreaks: StateFlow<List<TimetableEntry>> = selectedDate
+        .flatMapLatest { date ->
+            combine(
+                repository.observeAllPeriodsAndBreaksOfDate(date),
+                repository.observeCurrentPeriodOrBreak()
+            ) { items, current ->
+                items.map { entry ->
+                    when (entry) {
+                        is TimetableEntry.PeriodItem -> entry.copy(isCurrent = entry == current)
+                        is TimetableEntry.Break -> entry.copy(isCurrent = entry == current)
+                    }
+                }
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5), emptyList())
 
     val currentPeriod: StateFlow<Period?> = repository.observeCurrentPeriod()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5), null)
+
+    val currentPeriodOrBreak: StateFlow<TimetableEntry?> = repository.observeCurrentPeriodOrBreak()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5), null)
 
     fun selectDate(date: LocalDate) {

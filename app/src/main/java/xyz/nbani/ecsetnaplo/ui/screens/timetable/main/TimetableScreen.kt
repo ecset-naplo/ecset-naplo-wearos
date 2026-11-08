@@ -1,12 +1,13 @@
 package xyz.nbani.ecsetnaplo.ui.screens.timetable.main
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
 import androidx.wear.compose.material3.AnimatedPage
@@ -27,19 +28,31 @@ fun TimetableScreen(
     onOpenPeriodDetailsScreen: (LocalDate) -> Unit,
     isEditor: Boolean,
 ) {
-    val weekStart = remember { LocalDate.now().with(DayOfWeek.MONDAY) }
-    val todayIndex = remember {
-        ChronoUnit.DAYS.between(weekStart, LocalDate.now()).toInt()
+    var selectedDate by rememberSaveable { mutableStateOf(LocalDate.now()) }
+
+    val weekStart = selectedDate.with(DayOfWeek.MONDAY)
+
+    val pagerState = rememberPagerState(
+        initialPage = selectedDate.dayOfWeek.value - 1,
+        pageCount = { 7 }
+    )
+
+    LaunchedEffect(selectedDate) {
+        val targetPage = selectedDate.dayOfWeek.value - 1
+        if (pagerState.currentPage != targetPage) {
+            pagerState.animateScrollToPage(targetPage)
+        }
+        viewModel.selectDate(selectedDate)
     }
 
-    val pagerState = rememberPagerState(initialPage = todayIndex, pageCount = { 7 })
-
     LaunchedEffect(pagerState, weekStart) {
-        snapshotFlow { pagerState.currentPage }
+        snapshotFlow { pagerState.settledPage }
             .distinctUntilChanged()
-            .collectLatest { page ->
-                val selectedDate = weekStart.plusDays(page.toLong())
-                viewModel.selectDate(selectedDate)
+            .collect { page ->
+                val newDate = selectedDate
+                    .with(DayOfWeek.MONDAY)
+                    .plusDays(page.toLong())
+                if (newDate != selectedDate) selectedDate = newDate
             }
     }
 
@@ -54,6 +67,7 @@ fun TimetableScreen(
                 date,
                 onOpenAddPeriodPickerScreen,
                 onOpenPeriodDetailsScreen,
+                onChangeDate = { selectedDate = it },
                 isEditor
             )
         }

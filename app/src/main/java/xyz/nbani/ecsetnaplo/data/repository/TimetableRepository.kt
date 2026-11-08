@@ -20,6 +20,7 @@ import xyz.nbani.ecsetnaplo.data.local.entity.RegularPeriod
 import xyz.nbani.ecsetnaplo.data.local.entity.RoomEntity
 import xyz.nbani.ecsetnaplo.data.local.entity.Teacher
 import xyz.nbani.ecsetnaplo.data.model.Period
+import xyz.nbani.ecsetnaplo.data.model.TimetableEntry
 import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.time.Duration
@@ -97,6 +98,27 @@ class TimetableRepository(
             .flowOn(Dispatchers.Default)
             .distinctUntilChanged()
 
+    fun observeAllPeriodsAndBreaksOfDate(date: LocalDate): Flow<List<TimetableEntry>> =
+        observeAllPeriodsOfDate(date)
+            .map { periods ->
+                val sorted = periods.sortedBy { it.startTime }
+                var lastEnding: Period? = null
+
+                buildList {
+                    for (period in sorted) {
+                        val previous = lastEnding
+                        if (previous != null && previous.endTime < period.startTime) {
+                            add(TimetableEntry.Break(previous, period, false))
+                        }
+                        add(TimetableEntry.PeriodItem(period, false))
+                        if (previous == null || period.endTime > previous.endTime) {
+                            lastEnding = period
+                        }
+                    }
+                }
+            }
+            .distinctUntilChanged()
+
     private fun ticker(interval: Duration): Flow<LocalDateTime> = flow {
         while (true) {
             emit(LocalDateTime.now())
@@ -115,6 +137,21 @@ class TimetableRepository(
             .combine(ticker) { periods, now ->
                 val time = now.toLocalTime()
                 periods.firstOrNull { time >= it.startTime && time < it.endTime }
+            }
+            .distinctUntilChanged()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun observeCurrentPeriodOrBreak(): Flow<TimetableEntry?> {
+        val ticker = ticker(1.milliseconds)
+
+        return ticker
+            .map { it.toLocalDate() }
+            .distinctUntilChanged()
+            .flatMapLatest { date -> observeAllPeriodsAndBreaksOfDate(date) }
+            .combine(ticker) { items, now ->
+                val time = now.toLocalTime()
+                items.firstOrNull { time >= it.startTime && time < it.endTime }
             }
             .distinctUntilChanged()
     }

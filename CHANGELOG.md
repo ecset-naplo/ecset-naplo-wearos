@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Show break in current lesson screen
+
 ### Fixed
 
 - Deleting a period would return to its old details

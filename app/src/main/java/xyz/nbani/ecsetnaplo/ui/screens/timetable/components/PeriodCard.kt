@@ -19,7 +19,8 @@ import xyz.nbani.ecsetnaplo.data.local.entity.RegularPeriod
 import xyz.nbani.ecsetnaplo.data.local.entity.RoomEntity
 import xyz.nbani.ecsetnaplo.data.model.LessonType
 import xyz.nbani.ecsetnaplo.data.model.Period
-import xyz.nbani.ecsetnaplo.data.model.PeriodItem
+import xyz.nbani.ecsetnaplo.data.model.TimetableEntry
+import java.sql.Time
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -29,7 +30,7 @@ fun PeriodCard(
     modifier: Modifier = Modifier,
     transformation: SurfaceTransformation? = null,
     onClick: () -> Unit,
-    periodItem: PeriodItem,
+    periodItem: TimetableEntry.PeriodItem,
 ) {
     Button(
         icon = { Icon(periodItem.period.lesson.lessonType.icon, contentDescription = null) },
@@ -42,10 +43,10 @@ fun PeriodCard(
     )
 }
 
-class PeriodItemProvider : PreviewParameterProvider<PeriodItem> {
+class PeriodItemProvider : PreviewParameterProvider<TimetableEntry.PeriodItem> {
 
     override val values = sequenceOf(
-        PeriodItem(
+        TimetableEntry.PeriodItem(
             period = Period(
                 regularPeriod = RegularPeriod(
                     lessonId = 1L,
@@ -65,7 +66,7 @@ class PeriodItemProvider : PreviewParameterProvider<PeriodItem> {
             ),
             isCurrent = false
         ),
-        PeriodItem(
+        TimetableEntry.PeriodItem(
             period = Period(
                 regularPeriod = RegularPeriod(
                     lessonId = 2L,
@@ -93,7 +94,7 @@ class PeriodItemProvider : PreviewParameterProvider<PeriodItem> {
 @Composable
 fun PeriodCardPreview(
     @PreviewParameter(PeriodItemProvider::class)
-    periodItem: PeriodItem
+    periodItem: TimetableEntry.PeriodItem
 ) {
     PeriodCard(
         periodItem = periodItem,

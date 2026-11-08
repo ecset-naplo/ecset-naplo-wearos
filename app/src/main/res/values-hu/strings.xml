@@ -106,4 +106,5 @@
     <string name="irregular_period_delete_confirmation">Biztos vagy benne hogy ki szeretnéd ezt a rendhafgyó tanórát törölni? Ez a művelet nem vonható vissza!</string>
     <string name="period">Óraszám</string>
     <string name="no_room">Nincs szoba</string>
+    <string name="break_then">Szünet, utána:</string>
 </resources>
