@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0-beta.4] - 2026-11-08
+
 ### Fixed
 
 - Navigating to wrong day page when picking a different date in the timetable
