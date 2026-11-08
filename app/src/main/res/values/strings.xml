@@ -107,6 +107,7 @@
     <string name="period">Period</string>
     <string name="no_room">No room</string>
     <string name="break_then">Break, then:</string>
+    <string name="break_text">Break</string>
 
 
 </resources>

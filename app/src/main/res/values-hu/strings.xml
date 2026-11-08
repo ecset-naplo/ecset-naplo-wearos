@@ -107,4 +107,5 @@
     <string name="period">Óraszám</string>
     <string name="no_room">Nincs szoba</string>
     <string name="break_then">Szünet, utána:</string>
+    <string name="break_text">Szünet</string>
 </resources>

@@ -27,6 +27,7 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.compose.material3.lazy.transformedHeight
 import xyz.nbani.ecsetnaplo.R
+import xyz.nbani.ecsetnaplo.data.model.TimetableEntry
 import xyz.nbani.ecsetnaplo.ui.components.ClickRowElement
 import xyz.nbani.ecsetnaplo.ui.components.sectionHeader
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.pickers.ValidFromToPicker
@@ -49,7 +50,7 @@ fun DayPage(
     val state = rememberTransformingLazyColumnState()
     val spec = rememberTransformationSpec()
 
-    val periodItems by viewModel.periods.collectAsStateWithLifecycle()
+    val periodItems by viewModel.periodsAndBreaks.collectAsStateWithLifecycle()
 
     var showDatePicker by remember { mutableStateOf(false) }
 
@@ -83,15 +84,24 @@ fun DayPage(
             } else {
                 items(periodItems.size) { index ->
                     val periodItem = periodItems[index]
-                    PeriodCard(
-                        periodItem = periodItem,
-                        onClick = {
-                            viewModel.loadPeriod(periodItem.period)
-                            onOpenPeriodDetailsScreen(date)
-                        },
-                        modifier = Modifier.transformedHeight(this, spec),
-                        transformation = SurfaceTransformation(spec)
-                    )
+                    if (periodItem is TimetableEntry.PeriodItem) {
+                        PeriodCard(
+                            periodItem = periodItem,
+                            onClick = {
+                                viewModel.loadPeriod(periodItem.period)
+                                onOpenPeriodDetailsScreen(date)
+                            },
+                            modifier = Modifier.transformedHeight(this, spec),
+                            transformation = SurfaceTransformation(spec)
+                        )
+                    } else if (periodItem is TimetableEntry.Break) {
+                        PeriodCard(
+                            periodItem = periodItem,
+                            onClick = { },
+                            modifier = Modifier.transformedHeight(this, spec),
+                            transformation = SurfaceTransformation(spec)
+                        )
+                    }
                 }
             }
             if (isEditor) {
@@ -105,12 +115,15 @@ fun DayPage(
                             contentColor = MaterialTheme.colorScheme.onSecondary
                         ),
                         onClick = {
-                            onOpenAddPeriodPickerScreen(
-                                date.dayOfWeek,
-                                periodItems.lastOrNull()?.period?.period?.plus(1) ?: 0,
-                                periodItems.lastOrNull()?.period?.endTime ?: LocalTime.of(7, 15),
-                                date
-                            )
+                            (periodItems.lastOrNull() as? TimetableEntry.PeriodItem)
+                                ?.let { item ->
+                                    onOpenAddPeriodPickerScreen(
+                                        date.dayOfWeek,
+                                        item.period.period.plus(1),
+                                        item.period.endTime,
+                                        date
+                                    )
+                                }
                         },
                         modifier = Modifier.transformedHeight(this, spec),
                         transformation = SurfaceTransformation(spec),
