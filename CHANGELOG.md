@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Show breaks in timetable
 
+### Changed
+
+- More padding at the bottom of day page so the bottom UI element doesn't get cut off
+
 ## [0.1.0-beta.2] - 2026-11-08
 
 ### Added
