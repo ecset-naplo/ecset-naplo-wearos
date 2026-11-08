@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -12,14 +12,12 @@ import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
 import androidx.wear.compose.material3.AnimatedPage
 import androidx.wear.compose.material3.PagerScaffoldDefaults
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.components.DayPage
 import xyz.nbani.ecsetnaplo.ui.viewmodels.TimetableViewModel
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.temporal.ChronoUnit
 
 @Composable
 fun TimetableScreen(
@@ -31,6 +29,7 @@ fun TimetableScreen(
     var selectedDate by rememberSaveable { mutableStateOf(LocalDate.now()) }
 
     val weekStart = selectedDate.with(DayOfWeek.MONDAY)
+    val currentWeekStart = rememberUpdatedState(weekStart)
 
     val pagerState = rememberPagerState(
         initialPage = selectedDate.dayOfWeek.value - 1,
@@ -45,13 +44,11 @@ fun TimetableScreen(
         viewModel.selectDate(selectedDate)
     }
 
-    LaunchedEffect(pagerState, weekStart) {
+    LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.settledPage }
             .distinctUntilChanged()
             .collect { page ->
-                val newDate = selectedDate
-                    .with(DayOfWeek.MONDAY)
-                    .plusDays(page.toLong())
+                val newDate = currentWeekStart.value.plusDays(page.toLong())
                 if (newDate != selectedDate) selectedDate = newDate
             }
     }
