@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Changed old default Android icon for own icon
 
+### Fixed
+
+- Adding a period on a day wouldn't work if there was no period already added
+
 ## [0.1.0-beta.4] - 2026-11-08
 
 ### Fixed

@@ -135,6 +135,12 @@ fun DayPage(
                                         date
                                     )
                                 }
+                                ?: onOpenAddPeriodPickerScreen(
+                                    date.dayOfWeek,
+                                    0,
+                                    LocalTime.now(),
+                                    date
+                                )
                         },
                         modifier = Modifier.transformedHeight(this, spec),
                         transformation = SurfaceTransformation(spec),
