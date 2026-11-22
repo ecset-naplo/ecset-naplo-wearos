@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Adding a period on a day wouldn't work if there was no period already added
+- Progress indicator around the screen on current lesson screen would show old state when
+break or lesson started
 
 ## [0.1.0-beta.4] - 2026-11-08
 

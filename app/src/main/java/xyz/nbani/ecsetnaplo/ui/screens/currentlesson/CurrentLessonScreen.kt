@@ -32,7 +32,8 @@ import androidx.wear.compose.material3.MaterialTheme
 import xyz.nbani.ecsetnaplo.R
 import xyz.nbani.ecsetnaplo.data.model.TimetableEntry
 import xyz.nbani.ecsetnaplo.ui.components.ClickRowElement
-import xyz.nbani.ecsetnaplo.ui.screens.currentlesson.components.rememberProgress
+import xyz.nbani.ecsetnaplo.ui.screens.currentlesson.components.calculateProgress
+import xyz.nbani.ecsetnaplo.ui.screens.currentlesson.components.rememberNow
 import xyz.nbani.ecsetnaplo.ui.viewmodels.TimetableViewModel
 import java.time.Duration
 import java.time.LocalTime
@@ -46,6 +47,7 @@ fun CurrentLessonScreen(
 ) {
     val period by viewModel.currentPeriodOrBreak.collectAsStateWithLifecycle()
     val currentPeriod = period
+    val now = rememberNow()
 
     ScreenScaffold {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -74,7 +76,11 @@ fun CurrentLessonScreen(
             } else if (currentPeriod is TimetableEntry.PeriodItem) {
                 val (minutesTillEnd, secondsTillEnd) = timeLeftTillEnd(currentPeriod.endTime)
 
-                val progress = rememberProgress(currentPeriod.period)
+                val progress = calculateProgress(
+                    currentPeriod.period.startTime,
+                    currentPeriod.period.endTime,
+                    now
+                )
                 val animated by animateFloatAsState(
                     targetValue = progress,
                     animationSpec = tween(1000, easing = LinearEasing),
@@ -137,7 +143,11 @@ fun CurrentLessonScreen(
             } else if (currentPeriod is TimetableEntry.Break) {
                 val (minutesTillEnd, secondsTillEnd) = timeLeftTillEnd(currentPeriod.endTime)
 
-                val progress = rememberProgress(currentPeriod)
+                val progress = calculateProgress(
+                    currentPeriod.startTime,
+                    currentPeriod.endTime,
+                    now
+                )
                 val animated by animateFloatAsState(
                     targetValue = progress,
                     animationSpec = tween(1000, easing = LinearEasing),
