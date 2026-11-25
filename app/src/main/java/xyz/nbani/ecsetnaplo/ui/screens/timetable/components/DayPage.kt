@@ -54,7 +54,14 @@ fun DayPage(
     val state = rememberTransformingLazyColumnState()
     val spec = rememberTransformationSpec()
 
-    val periodItems by viewModel.periodsAndBreaks.collectAsStateWithLifecycle()
+    val settings by viewModel.settings.collectAsStateWithLifecycle()
+
+    val periodItemsFlow = when (settings?.showBreaksInTimetable) {
+        true -> viewModel.periodsAndBreaks
+        else -> viewModel.periods
+    }
+
+    val periodItems by periodItemsFlow.collectAsStateWithLifecycle()
 
     var showDatePicker by remember { mutableStateOf(false) }
 

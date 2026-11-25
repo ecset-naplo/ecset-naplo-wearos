@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - About section in settings screen
+- Being able to toggle breaks in timetable
 
 ### Changed
 

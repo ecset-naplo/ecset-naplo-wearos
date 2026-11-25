@@ -48,11 +48,27 @@ class TimetableViewModel(
 
     /**
      * Calls the [TimetableRepository.saveSettings] function.
+     * Helper (direct toggle) functions are better to call instead of this,
+     * as then copying the data class isn't needed.
+     *
+     * @param s The settings data class to save
      *
      * @see SettingsDao.saveSettings
      */
     fun saveSettings(s: Settings) = viewModelScope.launch { repository.saveSettings(s) }
 
+    // Direct toggle functions
+
+    /**
+     * Toggle showing breaks in timetable
+     * Copies the provided settings data class, and saves it with [saveSettings]
+     *
+     * @param settings The settings data class to copy
+     */
+    fun toggleShowBreaksInTimetable(settings: Settings) {
+        val toggled = settings.copy(showBreaksInTimetable = !settings.showBreaksInTimetable)
+        saveSettings(toggled)
+    }
 
     // Timetable related
 

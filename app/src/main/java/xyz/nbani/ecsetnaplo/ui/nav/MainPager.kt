@@ -22,7 +22,11 @@ fun MainPager(
         when (MainPage.entries[index]) {
             MainPage.CurrentLesson -> CurrentLessonScreen(timetableViewModel, onOpenTimetable)
             MainPage.Settings -> SettingsScreen(
-                onOpenTimetable, onOpenRoomsScreen, onOpenTeachersScreen, onOpenLessonsScreen
+                timetableViewModel,
+                onOpenTimetable,
+                onOpenRoomsScreen,
+                onOpenTeachersScreen,
+                onOpenLessonsScreen
             )
         }
     }

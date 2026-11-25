@@ -110,6 +110,8 @@
     <string name="break_text">Break</string>
     <string name="about">About</string>
     <string name="version">Version</string>
+    <string name="breaks_in_timetable">Breaks in timetable</string>
+    <string name="breaks_in_timetable_description">Show breaks in timetable</string>
 
 
 </resources>

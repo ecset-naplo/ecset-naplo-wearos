@@ -110,4 +110,6 @@
     <string name="break_text">Szünet</string>
     <string name="about">Alkalmazásról</string>
     <string name="version">Verzió</string>
+    <string name="breaks_in_timetable">Szünetek az órarendben</string>
+    <string name="breaks_in_timetable_description">Szünetek mutatása az órarendben</string>
 </resources>
