@@ -26,20 +26,19 @@ android {
 
     }
 
-    android {
-        buildTypes {
-            debug {
-                applicationIdSuffix = ".debug"
-                versionNameSuffix = "-debug"
-            }
-            release {
-                optimization {
-                    packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
-                    enable = true
-                }
+    buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+        }
+        release {
+            optimization {
+                packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
+                enable = true
             }
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
