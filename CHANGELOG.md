@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Changed old default Android icon for own icon
+- More padding at the bottom of settings page so the bottom UI element doesn't get cut off
 
 ### Fixed
 
