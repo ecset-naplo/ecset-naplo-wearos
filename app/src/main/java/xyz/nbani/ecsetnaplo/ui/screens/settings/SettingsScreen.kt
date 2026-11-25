@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Smartphone
 import androidx.compose.material.icons.filled.TableChart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +22,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SurfaceTransformation
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.compose.material3.lazy.transformedHeight
+import xyz.nbani.ecsetnaplo.BuildConfig
 import xyz.nbani.ecsetnaplo.R
 import xyz.nbani.ecsetnaplo.ui.components.ClickRowElement
 import xyz.nbani.ecsetnaplo.ui.components.PageTimeText
@@ -105,6 +107,21 @@ fun SettingsScreen(
                     subtitle = stringResource(R.string.manage_lessons_button_subtitle),
                     onClick = {
                         onOpenLessonsScreen(true)
+                    },
+                    modifier = Modifier.transformedHeight(this, spec),
+                    transformation = SurfaceTransformation(spec)
+                )
+            }
+
+            // About
+            sectionHeader(R.string.about)
+            item {
+                ClickRowElement(
+                    icon = Icons.Default.Smartphone,
+                    title = stringResource(R.string.version),
+                    subtitle = BuildConfig.VERSION_NAME,
+                    onClick = {
+
                     },
                     modifier = Modifier.transformedHeight(this, spec),
                     transformation = SurfaceTransformation(spec)

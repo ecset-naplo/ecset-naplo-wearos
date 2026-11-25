@@ -108,4 +108,6 @@
     <string name="no_room">Nincs szoba</string>
     <string name="break_then">Szünet, utána:</string>
     <string name="break_text">Szünet</string>
+    <string name="about">Alkalmazásról</string>
+    <string name="version">Verzió</string>
 </resources>

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- About section in settings screen
+
 ### Changed
 
 - Changed old default Android icon for own icon
