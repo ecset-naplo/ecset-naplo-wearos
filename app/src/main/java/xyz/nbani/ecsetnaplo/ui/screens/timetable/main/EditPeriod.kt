@@ -439,7 +439,7 @@ fun EditPeriod(
                             "Did you check if period was null before enabling it?"
                 }.startTime,
                 onTimePicked = { startTime = it; showStartTimePicker = false},
-                onDismissRequest = { showStartTimePicker }
+                onDismissRequest = { showStartTimePicker = false }
             )
         }
 

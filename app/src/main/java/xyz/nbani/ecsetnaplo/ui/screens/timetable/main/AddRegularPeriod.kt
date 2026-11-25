@@ -328,7 +328,7 @@ fun AddRegularPeriod(
             StartEndTimePicker(
                 initialTime = startTime,
                 onTimePicked = { startTime = it; showStartTimePicker = false},
-                onDismissRequest = { showStartTimePicker }
+                onDismissRequest = { showStartTimePicker = false }
             )
         }
 

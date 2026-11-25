@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Adding a period on a day wouldn't work if there was no period already added
 - Progress indicator around the screen on current lesson screen would show old state when
 break or lesson started
+- App locking up when picking a start time for a period (editing and adding)
 
 ## [0.1.0-beta.4] - 2026-11-08
 
