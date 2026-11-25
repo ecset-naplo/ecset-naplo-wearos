@@ -17,10 +17,12 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import xyz.nbani.ecsetnaplo.EcsetApp
+import xyz.nbani.ecsetnaplo.data.local.dao.SettingsDao
 import xyz.nbani.ecsetnaplo.data.local.entity.IrregularPeriod
 import xyz.nbani.ecsetnaplo.data.local.entity.Lesson
 import xyz.nbani.ecsetnaplo.data.local.entity.RegularPeriod
 import xyz.nbani.ecsetnaplo.data.local.entity.RoomEntity
+import xyz.nbani.ecsetnaplo.data.local.entity.Settings
 import xyz.nbani.ecsetnaplo.data.local.entity.Teacher
 import xyz.nbani.ecsetnaplo.data.model.Period
 import xyz.nbani.ecsetnaplo.data.model.TimetableEntry
@@ -31,6 +33,29 @@ import java.time.LocalDate
 class TimetableViewModel(
     private val repository: TimetableRepository
 ) : ViewModel() {
+    // User settings
+
+    // Timetable settings
+
+    /**
+     * Received from the [TimetableRepository.observeSettings] function.
+     *
+     * @see SettingsDao.initializeSettings
+     * @see SettingsDao.observeNullableSettings
+     */
+    val settings: StateFlow<Settings?> = repository.observeSettings()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5), null)
+
+    /**
+     * Calls the [TimetableRepository.saveSettings] function.
+     *
+     * @see SettingsDao.saveSettings
+     */
+    fun saveSettings(s: Settings) = viewModelScope.launch { repository.saveSettings(s) }
+
+
+    // Timetable related
+
     private val selectedDate = MutableStateFlow(LocalDate.now())
 
     val date: StateFlow<LocalDate> = selectedDate

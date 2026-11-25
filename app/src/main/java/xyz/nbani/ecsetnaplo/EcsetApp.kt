@@ -15,6 +15,7 @@ class EcsetApp : Application(), DatabaseHolder {
             db.lessonDao(),
             db.roomDao(),
             db.teacherDao(),
+            db.settingsDao()
         )
     }
 }

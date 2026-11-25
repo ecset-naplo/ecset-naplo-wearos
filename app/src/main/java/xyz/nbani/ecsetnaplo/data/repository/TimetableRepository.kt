@@ -6,18 +6,23 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import xyz.nbani.ecsetnaplo.data.local.dao.LessonDao
 import xyz.nbani.ecsetnaplo.data.local.dao.RoomDao
+import xyz.nbani.ecsetnaplo.data.local.dao.SettingsDao
 import xyz.nbani.ecsetnaplo.data.local.dao.TeacherDao
 import xyz.nbani.ecsetnaplo.data.local.dao.TimetableDao
 import xyz.nbani.ecsetnaplo.data.local.entity.IrregularPeriod
 import xyz.nbani.ecsetnaplo.data.local.entity.Lesson
 import xyz.nbani.ecsetnaplo.data.local.entity.RegularPeriod
 import xyz.nbani.ecsetnaplo.data.local.entity.RoomEntity
+import xyz.nbani.ecsetnaplo.data.local.entity.Settings
 import xyz.nbani.ecsetnaplo.data.local.entity.Teacher
 import xyz.nbani.ecsetnaplo.data.model.Period
 import xyz.nbani.ecsetnaplo.data.model.TimetableEntry
@@ -30,8 +35,31 @@ class TimetableRepository(
     private val timetableDao: TimetableDao,
     private val lessonDao: LessonDao,
     private val roomDao: RoomDao,
-    private val teacherDao: TeacherDao
+    private val teacherDao: TeacherDao,
+    private val settingsDao: SettingsDao
 ) {
+    // User settings
+
+    // Timetable settings
+
+    /**
+     * Calls the [SettingsDao.initializeSettings],
+     * then the [SettingsDao.observeNullableSettings] function.
+     * */
+    fun observeSettings(): Flow<Settings> = flow {
+        settingsDao.initializeSettings()
+        emitAll(settingsDao.observeNullableSettings().filterNotNull())
+    }
+
+    /** Calls the [SettingsDao.saveSettings] function. */
+    suspend fun saveSettings(settings: Settings) {
+        withContext(Dispatchers.IO) {
+            settingsDao.saveSettings(settings)
+        }
+    }
+
+    // Timetable related
+
     private fun createPeriod(
         regularPeriod: RegularPeriod?,
         irregularPeriod: IrregularPeriod?,
