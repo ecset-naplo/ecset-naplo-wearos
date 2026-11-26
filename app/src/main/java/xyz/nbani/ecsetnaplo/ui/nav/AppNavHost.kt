@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.wear.compose.navigation3.rememberSwipeDismissableSceneStrategy
+import xyz.nbani.ecsetnaplo.ui.screens.settings.developer.DeveloperOptionsScreen
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.main.TimetableScreen
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.AddLesson
 import xyz.nbani.ecsetnaplo.ui.screens.timetable.lessons.EditLesson
@@ -53,7 +54,16 @@ fun AppNavHost(
                     },
                     onOpenLessonsScreen = { isEditor ->
                         backStack.add(Destination.Lessons(isEditor))
-                    }
+                    },
+                    onOpenDeveloperOptionsScreen = { backStack.add(Destination.DeveloperOptions) }
+                )
+            }
+
+            // Developer options
+            entry<Destination.DeveloperOptions> {
+                DeveloperOptionsScreen(
+                    timetableViewModel,
+                    { backStack.removeLastOrNull() }
                 )
             }
 

@@ -1,6 +1,7 @@
 package xyz.nbani.ecsetnaplo.data.local.entity
 
 import android.os.Parcelable
+import androidx.room3.ColumnInfo
 import androidx.room3.Entity
 import androidx.room3.PrimaryKey
 import kotlinx.parcelize.Parcelize
@@ -18,5 +19,12 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Settings(
     @PrimaryKey val id: Int = 1,
-    val showBreaksInTimetable: Boolean = true
+    val showBreaksInTimetable: Boolean = true,
+
+    // Developer options
+    @ColumnInfo(defaultValue = "0")
+    val developerOptions: Boolean = false,
+
+    @ColumnInfo(defaultValue = "1")
+    val setDeveloperOptionsToDefaultOnDisable: Boolean = true,
 ) : Parcelable

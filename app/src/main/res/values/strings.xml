@@ -110,8 +110,13 @@
     <string name="break_text">Break</string>
     <string name="about">About</string>
     <string name="version">Version</string>
+    <string name="developer_options">Developer options</string>
     <string name="breaks_in_timetable">Breaks in timetable</string>
     <string name="breaks_in_timetable_description">Show breaks in timetable</string>
+    <string name="developer_options_countdown_toast">%1$d till developer options</string>
+    <string name="you_are_a_developer">You are a developer!</string>
+    <string name="already_a_developer">You are already a developer!</string>
+    <string name="default_dev_options_on_disable">Set developer optons to default when disabled</string>
 
 
 </resources>

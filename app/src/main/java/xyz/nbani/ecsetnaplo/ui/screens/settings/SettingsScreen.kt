@@ -1,11 +1,14 @@
 package xyz.nbani.ecsetnaplo.ui.screens.settings
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Person
@@ -14,10 +17,12 @@ import androidx.compose.material.icons.filled.TableChart
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -44,10 +49,17 @@ fun SettingsScreen(
     onOpenTimetable: (Boolean) -> Unit,
     onOpenRoomsScreen: (Boolean) -> Unit,
     onOpenTeachersScreen: (Boolean) -> Unit,
-    onOpenLessonsScreen: (Boolean) -> Unit
+    onOpenLessonsScreen: (Boolean) -> Unit,
+    onOpenDeveloperOptionsScreen: () -> Unit
 ) {
     val state = rememberTransformingLazyColumnState()
     val spec = rememberTransformationSpec()
+
+    var versionTapped by remember { mutableIntStateOf(0) }
+
+    val context = LocalContext.current
+    val toastMessage = stringResource(R.string.developer_options_countdown_toast, 7 - (versionTapped + 1))
+    var toast by remember { mutableStateOf<Toast?>(null) }
 
     var showLanguagePickerDialog by remember { mutableStateOf(false) }
 
@@ -153,11 +165,51 @@ fun SettingsScreen(
                         title = stringResource(R.string.version),
                         subtitle = BuildConfig.VERSION_NAME,
                         onClick = {
+                            toast?.cancel()
 
+                            if (!currentSettings.developerOptions) {
+                                versionTapped += 1
+                                Log.d("SettingsScreen", "tapped version: $versionTapped")
+                                if (versionTapped == 7) {
+                                    Log.d("SettingsScreen", "dev options on")
+                                    viewModel.toggleDeveloperOptions(currentSettings)
+
+                                    toast = Toast.makeText(
+                                        context,
+                                        R.string.you_are_a_developer,
+                                        Toast.LENGTH_SHORT
+                                    )
+                                } else {
+                                    toast = Toast.makeText(
+                                        context,
+                                        toastMessage,
+                                        Toast.LENGTH_SHORT
+                                    )
+                                }
+                            } else {
+                                Log.d("SettingsScreen", "already a dev")
+                                toast = Toast.makeText(
+                                    context,
+                                    R.string.already_a_developer,
+                                    Toast.LENGTH_SHORT
+                                )
+                            }
+                            toast?.show()
                         },
                         modifier = Modifier.transformedHeight(this, spec),
                         transformation = SurfaceTransformation(spec)
                     )
+                }
+                if (currentSettings.developerOptions) {
+                    item {
+                        ClickRowElement(
+                            icon = Icons.Default.DeveloperMode,
+                            title = stringResource(R.string.developer_options),
+                            onClick = { onOpenDeveloperOptionsScreen() },
+                            modifier = Modifier.transformedHeight(this, spec),
+                            transformation = SurfaceTransformation(spec)
+                        )
+                    }
                 }
             }
         } else {

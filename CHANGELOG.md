@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - About section in settings screen
 - Being able to toggle breaks in timetable
+- Developer options (accessed by tapping version in about section of settings 7 times)
 
 ### Changed
 

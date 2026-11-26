@@ -110,6 +110,11 @@
     <string name="break_text">Szünet</string>
     <string name="about">Alkalmazásról</string>
     <string name="version">Verzió</string>
+    <string name="developer_options">Fejlesztői beállítások</string>
     <string name="breaks_in_timetable">Szünetek az órarendben</string>
     <string name="breaks_in_timetable_description">Szünetek mutatása az órarendben</string>
+    <string name="developer_options_countdown_toast">%1$d till fejlesztői beállításokig</string>
+    <string name="you_are_a_developer">Te egy fejlesztő vagy!</string>
+    <string name="already_a_developer">Már egy fejlesztő vagy!</string>
+    <string name="default_dev_options_on_disable">Fejlesztői beállítások alapértelmezettre állítása mikor kikapcsolt</string>
 </resources>

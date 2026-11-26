@@ -70,6 +70,48 @@ class TimetableViewModel(
         saveSettings(toggled)
     }
 
+    // Developer options
+
+    /**
+     * Toggle developer options
+     * Copies the provided settings data class, and saves it with [saveSettings]
+     *
+     * @param settings The settings data class to copy
+     */
+    fun toggleDeveloperOptions(settings: Settings) {
+        val toggled = settings.copy(developerOptions = !settings.developerOptions)
+        saveSettings(toggled)
+    }
+
+    /**
+     * Toggles developer options being defaulted when developer options gets disabled
+     * Copies the provided settings data class, and saves it with [saveSettings]
+     *
+     * @param settings The settings data class to copy
+     */
+    fun toggleSetDeveloperOptionsToDefaultOnDisable(settings: Settings) {
+        val toggled = settings.copy(
+            setDeveloperOptionsToDefaultOnDisable = !settings.setDeveloperOptionsToDefaultOnDisable,
+        )
+        saveSettings(toggled)
+    }
+
+    /**
+     * Sets developer options back to their default state
+     * (except developer options toggle itself, and the default toggle)
+     * Copies the provided settings data class, sets the default values,
+     * and saves it with [saveSettings]
+     *
+     * @param settings The settings data class to copy
+     */
+    fun setDefaultDeveloperOptions(settings: Settings) {
+        val defaults = Settings()
+        val defaultDeveloperOptions = settings.copy(
+            // example = defaults.example
+        )
+        saveSettings(defaultDeveloperOptions)
+    }
+
     // Timetable related
 
     private val selectedDate = MutableStateFlow(LocalDate.now())

@@ -14,7 +14,8 @@ fun MainPager(
     onOpenTimetable: (Boolean) -> Unit,
     onOpenRoomsScreen: (Boolean) -> Unit,
     onOpenTeachersScreen: (Boolean) -> Unit,
-    onOpenLessonsScreen: (Boolean) -> Unit
+    onOpenLessonsScreen: (Boolean) -> Unit,
+    onOpenDeveloperOptionsScreen: () -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { MainPage.entries.size })
 
@@ -26,7 +27,8 @@ fun MainPager(
                 onOpenTimetable,
                 onOpenRoomsScreen,
                 onOpenTeachersScreen,
-                onOpenLessonsScreen
+                onOpenLessonsScreen,
+                onOpenDeveloperOptionsScreen
             )
         }
     }

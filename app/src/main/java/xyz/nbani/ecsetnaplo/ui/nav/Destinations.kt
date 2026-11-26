@@ -13,6 +13,9 @@ sealed interface Destination : NavKey {
     // Main routes
     @Serializable data object Main : Destination
 
+    // Developer options
+    @Serializable data object DeveloperOptions : NavKey
+
     // Timetable routes
     @Serializable data class Timetable(val isEditor: Boolean) : Destination
     @Serializable data class PeriodDetails(
