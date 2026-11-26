@@ -29,6 +29,8 @@ import xyz.nbani.ecsetnaplo.ui.viewmodels.TimetableViewModel
 fun AppNavHost(
     modifier: Modifier = Modifier,
     timetableViewModel: TimetableViewModel,
+    pendingDestination: String?,
+    onDestinationHandled: () -> Unit
 ) {
     val backStack = rememberNavBackStack(Destination.Main as NavKey)
     val strategy = rememberSwipeDismissableSceneStrategy<NavKey>()
@@ -43,6 +45,8 @@ fun AppNavHost(
             entry<Destination.Main> {
                 MainPager(
                     timetableViewModel = timetableViewModel,
+                    pendingDestination = pendingDestination,
+                    onDestinationHandled = onDestinationHandled,
                     onOpenTimetable = { isEditor ->
                         backStack.add(Destination.Timetable(isEditor))
                     },

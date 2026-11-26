@@ -76,6 +76,18 @@ fun DeveloperOptionsScreen(
                         transformation = SurfaceTransformation(spec)
                     )
                 }
+                sectionHeader(R.string.experimental_features)
+                item {
+                    ToggleRowElement(
+                        title = stringResource(R.string.ongoing_activity),
+                        checked = currentSettings.devOptionsExpFeatOngoingActivity,
+                        onCheckedChange = {
+                            viewModel.toggleExpFeatOngoingActivity(currentSettings)
+                        },
+                        modifier = Modifier.transformedHeight(this, spec),
+                        transformation = SurfaceTransformation(spec)
+                    )
+                }
             }
         }
     }

@@ -27,4 +27,8 @@ data class Settings(
 
     @ColumnInfo(defaultValue = "1")
     val setDeveloperOptionsToDefaultOnDisable: Boolean = true,
+
+    // Experimental features
+    @ColumnInfo(defaultValue = "0")
+    val devOptionsExpFeatOngoingActivity: Boolean = false
 ) : Parcelable

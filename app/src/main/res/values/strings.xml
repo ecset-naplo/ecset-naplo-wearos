@@ -108,6 +108,11 @@
     <string name="no_room">No room</string>
     <string name="break_then">Break, then:</string>
     <string name="break_text">Break</string>
+    <string name="current_status">Current status (current period, break, etc.)</string>
+    <string name="period_notification_title">Period</string>
+    <string name="lesson_ends_in">Lesson ends in</string>
+    <string name="break_ends_in">Break ends in</string>
+    <string name="remaining_time">Remaining: #time#</string>
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="developer_options">Developer options</string>
@@ -117,6 +122,8 @@
     <string name="you_are_a_developer">You are a developer!</string>
     <string name="already_a_developer">You are already a developer!</string>
     <string name="default_dev_options_on_disable">Set developer optons to default when disabled</string>
+    <string name="experimental_features">Experimental features</string>
+    <string name="ongoing_activity">Ongoing activity</string>
 
 
 </resources>

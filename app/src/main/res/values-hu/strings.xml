@@ -108,6 +108,11 @@
     <string name="no_room">Nincs szoba</string>
     <string name="break_then">Szünet, utána:</string>
     <string name="break_text">Szünet</string>
+    <string name="current_status">Mostani státusz (mostani óra, szünet stb.)</string>
+    <string name="period_notification_title">Óra</string>
+    <string name="lesson_ends_in">Órából hátralévő idő</string>
+    <string name="break_ends_in">Szünetből hátralévő idő</string>
+    <string name="remaining_time">Hátra: #time#</string>
     <string name="about">Alkalmazásról</string>
     <string name="version">Verzió</string>
     <string name="developer_options">Fejlesztői beállítások</string>
@@ -117,4 +122,6 @@
     <string name="you_are_a_developer">Te egy fejlesztő vagy!</string>
     <string name="already_a_developer">Már egy fejlesztő vagy!</string>
     <string name="default_dev_options_on_disable">Fejlesztői beállítások alapértelmezettre állítása mikor kikapcsolt</string>
+    <string name="experimental_features">Kísérleti funkciók</string>
+    <string name="ongoing_activity">Folyamatban lévő tevékenység</string>
 </resources>

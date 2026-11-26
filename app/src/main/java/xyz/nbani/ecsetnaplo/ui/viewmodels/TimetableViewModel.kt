@@ -96,6 +96,21 @@ class TimetableViewModel(
         saveSettings(toggled)
     }
 
+    // Experimental features
+
+    /**
+     * Toggles developer options being defaulted when developer options gets disabled
+     * Copies the provided settings data class, and saves it with [saveSettings]
+     *
+     * @param settings The settings data class to copy
+     */
+    fun toggleExpFeatOngoingActivity(settings: Settings) {
+        val toggled = settings.copy(
+            devOptionsExpFeatOngoingActivity = !settings.devOptionsExpFeatOngoingActivity
+        )
+        saveSettings(toggled)
+    }
+
     /**
      * Sets developer options back to their default state
      * (except developer options toggle itself, and the default toggle)
@@ -108,6 +123,7 @@ class TimetableViewModel(
         val defaults = Settings()
         val defaultDeveloperOptions = settings.copy(
             // example = defaults.example
+            devOptionsExpFeatOngoingActivity = defaults.devOptionsExpFeatOngoingActivity
         )
         saveSettings(defaultDeveloperOptions)
     }
